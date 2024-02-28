@@ -10,7 +10,7 @@ const DefaultPalette = (mode: PaletteMode, themeColor: ThemeColor) => {
 
   const primaryGradient = () => {
     if (themeColor === 'primary') {
-      return '#C6A7FE'
+      return '#FED700'
     } else if (themeColor === 'secondary') {
       return '#9C9FA4'
     } else if (themeColor === 'success') {
@@ -32,14 +32,14 @@ const DefaultPalette = (mode: PaletteMode, themeColor: ThemeColor) => {
     },
     common: {
       black: '#000',
-      white: '#FFF'
+      white: '#000'
     },
     mode: mode,
     primary: {
-      light: '#9E69FD',
-      main: '#9155FD',
-      dark: '#804BDF',
-      contrastText: '#FFF'
+      light: '#FED700',
+      main: '#FFD700',
+      dark: '#0A121E',
+      contrastText: '#000'
     },
     secondary: {
       light: '#9C9FA4',
@@ -88,14 +88,14 @@ const DefaultPalette = (mode: PaletteMode, themeColor: ThemeColor) => {
       A700: '#303030'
     },
     text: {
-      primary: `rgba(${mainColor}, 0.87)`,
+      primary: `rgba(${mainColor}, 1)`,
       secondary: `rgba(${mainColor}, 0.68)`,
       disabled: `rgba(${mainColor}, 0.38)`
     },
     divider: `rgba(${mainColor}, 0.12)`,
     background: {
       paper: mode === 'light' ? '#FFF' : '#312D4B',
-      default: mode === 'light' ? '#F4F5FA' : '#28243D'
+      default: mode === 'light' ? '#F4F5FA' : '#0A121E'
     },
     action: {
       active: `rgba(${mainColor}, 0.54)`,
