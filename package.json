@@ -50,6 +50,7 @@
     "@emotion/styled": "^11.10.5",
     "@mui/lab": "^5.0.0-alpha.114",
     "@mui/material": "^5.11.2",
+    "@mui/x-data-grid": "^6.19.5",
     "@popperjs/core": "^2.11.6",
     "apexcharts-clevision": "3.28.5",
     "clsx": "^1.2.1",
