@@ -86,7 +86,9 @@ const Navigation = (props: Props) => {
 
   // ** Scroll Menu
   const scrollMenu = (container: any) => {
+
     container = hidden ? container.target : container
+    
     if (shadowRef && container.scrollTop > 0) {
       // @ts-ignore
       if (!shadowRef.current.classList.contains('d-block')) {

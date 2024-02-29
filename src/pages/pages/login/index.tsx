@@ -219,7 +219,6 @@ const LoginPage = () => {
               fullWidth
               size='large'
               variant='contained'
-              // sx={{ marginBottom: 5 }}
               onClick={() => router.push('/')}
             >
               Login

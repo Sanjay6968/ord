@@ -32,6 +32,10 @@ const Typography = (theme: Theme) => {
       letterSpacing: '0.15px',
       color: theme.palette.text.primary
     },
+    h7: {
+      letterSpacing: '0.15px',
+      color: theme.palette.text.primary
+    },
     subtitle1: {
       letterSpacing: '0.15px',
       color: theme.palette.text.primary

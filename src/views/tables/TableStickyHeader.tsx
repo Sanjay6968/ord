@@ -26,8 +26,11 @@ const columns: GridColDef[] = [
     headerName: 'Status', 
     flex: 1,
     renderCell: (params) => {
+      
       const color = statusColors[params.value as keyof typeof statusColors] || 'default';
+      
       return <Chip label={params.value} color={color} />;
+      
     },
   },
 ];
