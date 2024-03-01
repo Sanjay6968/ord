@@ -90,71 +90,45 @@ const LoginPage = () => {
       <Card sx={{ zIndex: 1 }}>
         <CardContent sx={{ padding: theme => `${theme.spacing(12, 9, 7)} !important` }}>
           <Box sx={{ mb: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <svg
-              width={35}
-              height={29}
-              version='1.1'
-              viewBox='0 0 30 23'
-              xmlns='http://www.w3.org/2000/svg'
-              xmlnsXlink='http://www.w3.org/1999/xlink'
-            >
-              <g stroke='none' strokeWidth='1' fill='none' fillRule='evenodd'>
-                <g id='Artboard' transform='translate(-95.000000, -51.000000)'>
-                  <g id='logo' transform='translate(95.000000, 50.000000)'>
-                    <path
-                      id='Combined-Shape'
-                      fill={theme.palette.primary.main}
-                      d='M30,21.3918362 C30,21.7535219 29.9019196,22.1084381 29.7162004,22.4188007 C29.1490236,23.366632 27.9208668,23.6752135 26.9730355,23.1080366 L26.9730355,23.1080366 L23.714971,21.1584295 C23.1114106,20.7972624 22.7419355,20.1455972 22.7419355,19.4422291 L22.7419355,19.4422291 L22.741,12.7425689 L15,17.1774194 L7.258,12.7425689 L7.25806452,19.4422291 C7.25806452,20.1455972 6.88858935,20.7972624 6.28502902,21.1584295 L3.0269645,23.1080366 C2.07913318,23.6752135 0.850976404,23.366632 0.283799571,22.4188007 C0.0980803893,22.1084381 2.0190442e-15,21.7535219 0,21.3918362 L0,3.58469444 L0.00548573643,3.43543209 L0.00548573643,3.43543209 L0,3.5715689 C3.0881846e-16,2.4669994 0.8954305,1.5715689 2,1.5715689 C2.36889529,1.5715689 2.73060353,1.67359571 3.04512412,1.86636639 L15,9.19354839 L26.9548759,1.86636639 C27.2693965,1.67359571 27.6311047,1.5715689 28,1.5715689 C29.1045695,1.5715689 30,2.4669994 30,3.5715689 L30,3.5715689 Z'
-                    />
-
-                    <polygon
-                      id='Rectangle'
-                      opacity='0.077704'
-                      fill={theme.palette.common.black}
-                      points='0 8.58870968 7.25806452 12.7505183 7.25806452 16.8305646'
-                    />
-
-                    <polygon
-                      id='Rectangle'
-                      opacity='0.077704'
-                      fill={theme.palette.common.black}
-                      points='0 8.58870968 7.25806452 12.6445567 7.25806452 15.1370162'
-                    />
-
-                    <polygon
-                      id='Rectangle'
-                      opacity='0.077704'
-                      fill={theme.palette.common.black}
-                      points='22.7419355 8.58870968 30 12.7417372 30 16.9537453'
-                      transform='translate(26.370968, 12.771227) scale(-1, 1) translate(-26.370968, -12.771227) '
-                    />
-
-                    <polygon
-                      id='Rectangle'
-                      opacity='0.077704'
-                      fill={theme.palette.common.black}
-                      points='22.7419355 8.58870968 30 12.6409734 30 15.2601969'
-                      transform='translate(26.370968, 11.924453) scale(-1, 1) translate(-26.370968, -11.924453) '
-                    />
-
-                    <path
-                      id='Rectangle'
-                      fillOpacity='0.15'
-                      fill={theme.palette.common.white}
-                      d='M3.04512412,1.86636639 L15,9.19354839 L15,9.19354839 L15,17.1774194 L0,8.58649679 L0,3.5715689 C3.0881846e-16,2.4669994 0.8954305,1.5715689 2,1.5715689 C2.36889529,1.5715689 2.73060353,1.67359571 3.04512412,1.86636639 Z'
-                    />
-
-                    <path
-                      id='Rectangle'
-                      fillOpacity='0.35'
-                      fill={theme.palette.common.white}
-                      transform='translate(22.500000, 8.588710) scale(-1, 1) translate(-22.500000, -8.588710) '
-                      d='M18.0451241,1.86636639 L30,9.19354839 L30,9.19354839 L30,17.1774194 L15,8.58649679 L15,3.5715689 C15,2.4669994 15.8954305,1.5715689 17,1.5715689 C17.3688953,1.5715689 17.7306035,1.67359571 18.0451241,1.86636639 Z'
-                    />
-                  </g>
+                <svg width="60" height="70" viewBox="0 0 284 321" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g filter="url(#filter0_dd_92_4)">
+                  <path d="M142 9L14 82.6667V230.333L142 304.333L270 230.333V82.6667L142 9ZM205 118L144 82.6667V16.879L264.333 84L205 118ZM80.6667 123.667L140 158V226.333L80.6667 192V123.667ZM144 157.667L203.333 123.333V191.667L144 226.333V157.667ZM142 154.333L112.333 137.333L82.6667 120.333L142 86L201.333 120.333L142 154.333ZM140 82.6667L79 118L19.6667 84L140 16.879V82.6667ZM77 121.333V192L19.6667 225L17.6667 87L77 121.333ZM78.6667 195.333L140 230.667V297L21 229.5L78.6667 195.333ZM144 230.667L205.333 195.333L264.5 229L144 297V230.667ZM207 192V121.333L266.333 87L264.667 225L207 192Z" fill="#FED700"/>
+                  <path d="M142 9L14 82.6667V230.333L142 304.333L270 230.333V82.6667L142 9ZM205 118L144 82.6667V16.879L264.333 84L205 118ZM80.6667 123.667L140 158V226.333L80.6667 192V123.667ZM144 157.667L203.333 123.333V191.667L144 226.333V157.667ZM142 154.333L112.333 137.333L82.6667 120.333L142 86L201.333 120.333L142 154.333ZM140 82.6667L79 118L19.6667 84L140 16.879V82.6667ZM77 121.333V192L19.6667 225L17.6667 87L77 121.333ZM78.6667 195.333L140 230.667V297L21 229.5L78.6667 195.333ZM144 230.667L205.333 195.333L264.5 229L144 297V230.667ZM207 192V121.333L266.333 87L264.667 225L207 192Z" stroke="#FED700" stroke-width="15"/>
                 </g>
-              </g>
-            </svg>
+                <g filter="url(#filter1_d_92_4)">
+                  <path d="M14 228.481V81.078L82.6667 120.043L112.333 137.043L142 154.043L201.333 120.043L270 81.078V230.043M146.5 160L80.6667 123.377L17.6667 86.71V228.481M137 160L203.333 123.377L266.333 86.71V230.043" stroke="#123CB4" stroke-width="20"/>
+                </g>
+                <path d="M267.163 81.4221L263.533 81.7403L264.974 84.6494L267.572 83.026L267.163 81.4221Z" fill="#123CB4" stroke="#123CB4"/>
+                <path d="M20.461 81.7403L16.8635 81.4286L16.5908 83.026L19.1882 84.3247L20.461 81.7403Z" fill="#123CB4" stroke="#123CB4"/>
+                <defs>
+                  <filter id="filter0_dd_92_4" x="0.428711" y="0.346619" width="283.284" height="320.65" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                    <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+                    <feOffset dy="4"/>
+                    <feGaussianBlur stdDeviation="2"/>
+                    <feComposite in2="hardAlpha" operator="out"/>
+                    <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+                    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_92_4"/>
+                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+                    <feOffset dy="4"/>
+                    <feGaussianBlur stdDeviation="2"/>
+                    <feComposite in2="hardAlpha" operator="out"/>
+                    <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+                    <feBlend mode="normal" in2="effect1_dropShadow_92_4" result="effect2_dropShadow_92_4"/>
+                    <feBlend mode="normal" in="SourceGraphic" in2="effect2_dropShadow_92_4" result="shape"/>
+                  </filter>
+                  <filter id="filter1_d_92_4" x="0" y="63.9056" width="284" height="174.138" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                    <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+                    <feOffset dy="4"/>
+                    <feGaussianBlur stdDeviation="2"/>
+                    <feComposite in2="hardAlpha" operator="out"/>
+                    <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0"/>
+                    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_92_4"/>
+                    <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_92_4" result="shape"/>
+                  </filter>
+                </defs>
+              </svg>
 
             <Typography
               variant='h6'

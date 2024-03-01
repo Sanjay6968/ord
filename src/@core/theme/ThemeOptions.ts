@@ -19,7 +19,7 @@ const themeOptions = (settings: Settings): ThemeOptions => {
     palette: palette(mode, themeColor),
     typography: {
       fontFamily: [
-        'Inter',
+        'Poppins',
         'sans-serif',
         '-apple-system',
         'BlinkMacSystemFont',

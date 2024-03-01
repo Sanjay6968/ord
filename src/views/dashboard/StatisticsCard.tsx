@@ -15,7 +15,7 @@ import CardContent from '@mui/material/CardContent'
 import TrendingUp from 'mdi-material-ui/TrendingUp'
 import CurrencyInr from 'mdi-material-ui/CurrencyInr'
 import DotsVertical from 'mdi-material-ui/DotsVertical'
-import FlaskEmpty from 'mdi-material-ui/FlaskEmpty';
+import Flask from 'mdi-material-ui/Flask';
 import AccountOutline from 'mdi-material-ui/AccountOutline'
 
 // ** Types
@@ -44,8 +44,8 @@ const salesData: DataType[] = [
   {
     stats: '50',
     color: 'warning',
-    title: 'Items',
-    icon: <FlaskEmpty sx={{ fontSize: '1.75rem' }} />
+    title: 'Inventory',
+    icon: <Flask sx={{ fontSize: '1.75rem' }} />
   },
   {
     stats: '40,500',
@@ -96,9 +96,9 @@ const StatisticsCard = () => {
         subheader={
           <Typography variant='body2'>
             <Box component='span' sx={{ fontWeight: 600, color: 'text.primary' }}>
-              Total 48.5% growth
+              Keep these numbers up !
             </Box>{' '}
-            😎 this month
+            🚀 🚀
           </Typography>
         }
         titleTypographyProps={{
