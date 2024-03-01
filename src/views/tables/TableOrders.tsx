@@ -1,6 +1,18 @@
 import * as React from 'react';
-import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
+import { useState } from 'react';
+import { DataGrid, GridColDef, GridValueGetterParams, GridRowParams } from '@mui/x-data-grid';
 import { Chip } from '@mui/material';
+import OrderDetailsDialog from 'src/pages/orders/OrderDetailsDialog';
+
+interface Order {
+  id: number;
+  date: string;
+  orderNo: string;
+  product: string;
+  customer: string;
+  amount: number;
+  status: string;
+}
 
 const statusColors: { [key: string]: 'error' | 'success' | 'warning' | 'info'} = {
   Pending: 'warning',
@@ -35,7 +47,7 @@ const columns: GridColDef[] = [
   },
 ];
 
-const rows = [
+const initialRows: Order[] = [
   { id: 1, date: '2024-02-28', orderNo: 'OR001', product: 'Product A', customer: 'Customer 1', amount: 100, status: 'Pending' },
   { id: 2, date: '2024-02-27', orderNo: 'OR002', product: 'Product B', customer: 'Customer 2', amount: 200, status: 'Completed' },
   { id: 3, date: '2024-02-26', orderNo: 'OR003', product: 'Product C', customer: 'Customer 3', amount: 150, status: 'Pending' },
@@ -44,14 +56,40 @@ const rows = [
 ];
 
 export default function DataTable() {
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [orders, setOrders] = useState<Order[]>(initialRows);
+
+  const handleRowClick = (params: GridRowParams) => {
+    setSelectedOrder(params.row);
+    setDialogOpen(true);
+  };
+
+  const updateOrderStatus = (orderNo: string, newStatus: string) => {
+    setOrders((prevOrders) =>
+    prevOrders ? prevOrders.map((order: Order) =>
+        order.orderNo === orderNo ? { ...order, status: newStatus } : order
+      ) : []
+    );
+  };
+
   return (
     <div style={{ height: 400, width: '100%' }}>
       <DataGrid
-        rows={rows}
+        rows={orders}
         columns={columns}
         checkboxSelection
         disableRowSelectionOnClick
+        onRowClick={handleRowClick}
       />
+      {selectedOrder && (
+        <OrderDetailsDialog
+          open={dialogOpen}
+          onClose={() => setDialogOpen(false)}
+          order={selectedOrder}
+          updateOrderStatus={updateOrderStatus}
+        />
+      )}
     </div>
   );
 }
