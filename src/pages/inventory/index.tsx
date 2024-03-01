@@ -14,11 +14,11 @@ const Inventory = () => {
       <Grid item xs={12}>
         <Typography variant='h5'>
           <Link href='https://mui.com/components/tables/' target='_blank'>
-            INVENTORY
+            Inventory
           </Link>
         </Typography>
 
-        <Typography variant='body2'>They can be fully customized</Typography>
+        <Typography variant='body2'>Inventory can be managed here</Typography>
       </Grid>
 
       <Grid item xs={12}>

@@ -5,10 +5,9 @@ const path = require('path')
 const nextConfig = {
   trailingSlash: true,
   reactStrictMode: false,
-  experimental: {
-    esmExternals: false,
-    appDir: false,
-  },
+  // experimental: {
+  //   esmExternals: false,
+  // },
   webpack: config => ({
     ...config,
     resolve: {
