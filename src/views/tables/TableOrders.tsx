@@ -12,6 +12,14 @@ interface Order {
   customer: string;
   amount: number;
   status: string;
+  technologyUsed: string;
+  materialUsed: string;
+  layerThickness: string;
+  deliveryType: string;
+  customerName: string;
+  customerAddress: string;
+  customerEmail: string;
+  customerPhone: string;
 }
 
 const statusColors: { [key: string]: 'error' | 'success' | 'warning' | 'info'} = {
@@ -48,11 +56,11 @@ const columns: GridColDef[] = [
 ];
 
 const initialRows: Order[] = [
-  { id: 1, date: '2024-02-28', orderNo: 'OR001', product: 'Product A', customer: 'Customer 1', amount: 100, status: 'Pending' },
-  { id: 2, date: '2024-02-27', orderNo: 'OR002', product: 'Product B', customer: 'Customer 2', amount: 200, status: 'Completed' },
-  { id: 3, date: '2024-02-26', orderNo: 'OR003', product: 'Product C', customer: 'Customer 3', amount: 150, status: 'Pending' },
-  { id: 4, date: '2024-02-25', orderNo: 'OR004', product: 'Product D', customer: 'Customer 4', amount: 300, status: 'OnHold' },
-  { id: 5, date: '2024-02-24', orderNo: 'OR005', product: 'Product E', customer: 'Customer 5', amount: 400, status: 'Cancelled' },
+  { id: 1, date: '2024-02-28', orderNo: 'OR001', product: 'Product A', customer: 'Customer 1', amount: 100, status: 'Pending', technologyUsed: '', materialUsed: '', layerThickness: '', deliveryType: '', customerName: '', customerAddress: '', customerEmail: '', customerPhone: ''},
+  { id: 2, date: '2024-02-27', orderNo: 'OR002', product: 'Product B', customer: 'Customer 2', amount: 200, status: 'Completed', technologyUsed: '', materialUsed: '', layerThickness: '', deliveryType: '', customerName: '', customerAddress: '', customerEmail: '', customerPhone: '' },
+  { id: 3, date: '2024-02-26', orderNo: 'OR003', product: 'Product C', customer: 'Customer 3', amount: 150, status: 'Pending', technologyUsed: '', materialUsed: '', layerThickness: '', deliveryType: '', customerName: '', customerAddress: '', customerEmail: '', customerPhone: '' },
+  { id: 4, date: '2024-02-25', orderNo: 'OR004', product: 'Product D', customer: 'Customer 4', amount: 300, status: 'OnHold', technologyUsed: '', materialUsed: '', layerThickness: '', deliveryType: '', customerName: '', customerAddress: '', customerEmail: '', customerPhone: '' },
+  { id: 5, date: '2024-02-24', orderNo: 'OR005', product: 'Product E', customer: 'Customer 5', amount: 400, status: 'Cancelled', technologyUsed: '', materialUsed: '', layerThickness: '', deliveryType: '', customerName: '', customerAddress: '', customerEmail: '', customerPhone: '' },
 ];
 
 export default function DataTable() {

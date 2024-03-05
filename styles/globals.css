@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 html,
 body {
   min-height: 100%;
@@ -21,4 +25,36 @@ code:not([class*='language-']):after {
 }
 code[class*='language-'] {
   padding: 0;
+}
+
+.bg-mainBackgroundColor {
+  background-color: #D6DDFF;
+}
+
+.border-columnBackgroundColor {
+  border-color: #8A9EFF;
+}
+
+#root {
+  background-color: black;
+  color: white;
+  box-sizing: border-box;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar:horizontal {
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #515456;
+  border-radius: 0.25rem;
+}
+
+.task > ::-webkit-scrollbar-thumb {
+  background-color: stone-500;
+  border-radius: rounded-xl;
 }
