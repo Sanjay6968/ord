@@ -3,7 +3,7 @@ import Grid from '@mui/material/Grid'
 
 // ** Icons Imports
 import Poll from 'mdi-material-ui/Poll'
-import CurrencyUsd from 'mdi-material-ui/CurrencyUsd'
+import CurrencyInr from 'mdi-material-ui/CurrencyInr'
 import HelpCircleOutline from 'mdi-material-ui/HelpCircleOutline'
 import BriefcaseVariantOutline from 'mdi-material-ui/BriefcaseVariantOutline'
 
@@ -22,7 +22,9 @@ import WeeklyOverview from 'src/views/dashboard/WeeklyOverview'
 import DepositWithdraw from 'src/views/dashboard/DepositWithdraw'
 import SalesByCountries from 'src/views/dashboard/SalesByCountries'
 
+
 export default function Dashboard() {
+
   if (typeof window === 'undefined') {
     console.log('window is undefined')
 
@@ -44,17 +46,17 @@ export default function Dashboard() {
           </Grid>
 
           <Grid item xs={12} md={6} lg={4}>
-            <TotalEarning />
+            <SalesByCountries />
           </Grid>
 
           <Grid item xs={12} md={6} lg={4}>
             <Grid container spacing={6}>
               <Grid item xs={6}>
                 <CardStatisticsVerticalComponent
-                  stats='$25.6k'
+                  stats='₹12000'
                   icon={<Poll />}
                   color='success'
-                  trendNumber='+42%'
+                  trendNumber='+15%'
                   title='Total Profit'
                   subtitle='Weekly Profit'
                 />
@@ -62,33 +64,33 @@ export default function Dashboard() {
 
               <Grid item xs={6}>
                 <CardStatisticsVerticalComponent
-                  stats='$78'
+                  stats='₹2000'
                   title='Refunds'
                   trend='negative'
                   color='secondary'
-                  trendNumber='-15%'
+                  trendNumber='-2%'
                   subtitle='Past Month'
-                  icon={<CurrencyUsd />}
+                  icon={<CurrencyInr />}
                 />
               </Grid>
 
               <Grid item xs={6}>
                 <CardStatisticsVerticalComponent
-                  stats='862'
-                  trend='negative'
-                  trendNumber='-18%'
-                  title='New Project'
-                  subtitle='Yearly Project'
+                  stats='62'
+                  trend='positive'
+                  trendNumber='+18%'
+                  title='New Projects'
+                  subtitle='Monthly Projects'
                   icon={<BriefcaseVariantOutline />}
                 />
               </Grid>
 
               <Grid item xs={6}>
                 <CardStatisticsVerticalComponent
-                  stats='15'
+                  stats='38'
                   color='warning'
                   trend='negative'
-                  trendNumber='-18%'
+                  trendNumber='-6%'
                   subtitle='Last Week'
                   title='Sales Queries'
                   icon={<HelpCircleOutline />}
@@ -97,13 +99,9 @@ export default function Dashboard() {
             </Grid>
           </Grid>
 
-          <Grid item xs={12} md={6} lg={4}>
-            <SalesByCountries />
-          </Grid>
-
-          <Grid item xs={12} md={12} lg={8}>
+          {/* <Grid item xs={12} md={12} lg={8}>
             <DepositWithdraw />
-          </Grid>
+          </Grid> */}
 
           <Grid item xs={12}>
             <Table />

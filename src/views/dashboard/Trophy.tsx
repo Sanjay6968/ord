@@ -21,9 +21,18 @@ const TrophyImg = styled('img')({
   position: 'absolute'
 })
 
+// Next imports
+import { useRouter } from 'next/router';
+
 const Trophy = () => {
   // ** Hook
   const theme = useTheme()
+
+  const router = useRouter();
+  
+  const navigateToOrders = () => {
+    router.push('/orders');
+  };
 
   const imageSrc = theme.palette.mode === 'light' ? 'triangle-light.png' : 'triangle-dark.png'
 
@@ -40,7 +49,7 @@ const Trophy = () => {
         ₹40500
         </Typography>
 
-        <Button size='small' variant='contained'>
+        <Button size='small' variant='contained' onClick={navigateToOrders}>
           View Sales
         </Button>
 

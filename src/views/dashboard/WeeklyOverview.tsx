@@ -17,9 +17,18 @@ import { ApexOptions } from 'apexcharts'
 // ** Custom Components Imports
 import ReactApexcharts from 'src/@core/components/react-apexcharts'
 
+// Next imports
+import { useRouter } from 'next/router';
+
 const WeeklyOverview = () => {
   // ** Hook
   const theme = useTheme()
+
+  const router = useRouter();
+  
+  const navigateToOrders = () => {
+    router.push('/orders');
+  };
 
   const options: ApexOptions = {
     chart: {
@@ -108,7 +117,7 @@ const WeeklyOverview = () => {
           <Typography variant='body2'>Your sales performance is 45% 😎 better compared to last month</Typography>
         </Box>
 
-        <Button fullWidth variant='contained'>
+        <Button fullWidth variant='contained' onClick={navigateToOrders}>
           Details
         </Button>
       </CardContent>
