@@ -1,10 +1,10 @@
 // ** Icon imports
-import Login from 'mdi-material-ui/Login'
+// import Login from 'mdi-material-ui/Login'
 import HomeOutline from 'mdi-material-ui/HomeOutline'
 
-import AccountCogOutline from 'mdi-material-ui/AccountCogOutline'
-import AccountPlusOutline from 'mdi-material-ui/AccountPlusOutline'
-import AlertCircleOutline from 'mdi-material-ui/AlertCircleOutline'
+// import AccountCogOutline from 'mdi-material-ui/AccountCogOutline'
+// import AccountPlusOutline from 'mdi-material-ui/AccountPlusOutline'
+// import AlertCircleOutline from 'mdi-material-ui/AlertCircleOutline'
 import FormatListBulleted from 'mdi-material-ui/FormatListBulleted'
 import PackageVariant from 'mdi-material-ui/PackageVariant'
 import Printer3dNozzle from 'mdi-material-ui/Printer3dNozzle'
@@ -49,27 +49,28 @@ const navigation = (): VerticalNavItemsType => {
       title: 'Financials',
       path: '/financials'
     },
-    {
-      sectionTitle: 'Pages'
-    },
-    {
-      title: 'Login',
-      icon: Login,
-      path: '/pages/login',
-      openInNewTab: true
-    },
-    {
-      title: 'Register',
-      icon: AccountPlusOutline,
-      path: '/pages/register',
-      openInNewTab: true
-    },
-    {
-      title: 'Error',
-      icon: AlertCircleOutline,
-      path: '/pages/error',
-      openInNewTab: true
-    }
+
+    // {
+    //   sectionTitle: 'Pages'
+    // },
+    // {
+    //   title: 'Login',
+    //   icon: Login,
+    //   path: '/pages/login',
+    //   openInNewTab: true
+    // },
+    // {
+    //   title: 'Register',
+    //   icon: AccountPlusOutline,
+    //   path: '/pages/register',
+    //   openInNewTab: true
+    // },
+    // {
+    //   title: 'Error',
+    //   icon: AlertCircleOutline,
+    //   path: '/pages/error',
+    //   openInNewTab: true
+    // }
     
     // {
     //   sectionTitle: 'User Interface'
