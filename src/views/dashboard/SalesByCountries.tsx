@@ -31,51 +31,51 @@ interface DataType {
 
 const data: DataType[] = [
   {
-    sales: '894k',
+    sales: '894K',
     trendDir: 'up',
-    subtitle: 'USA',
-    title: '$8,656k',
-    avatarText: 'US',
+    subtitle: 'Telangana',
+    title: '₹8600',
+    avatarText: 'TS',
     trendNumber: '25.8%',
     avatarColor: 'success',
     trend: <ChevronUp sx={{ color: 'success.main', fontWeight: 600 }} />
   },
   {
-    sales: '645k',
-    subtitle: 'UK',
+    sales: '645K',
+    subtitle: 'Andhra Pradesh',
     trendDir: 'down',
-    title: '$2,415k',
-    avatarText: 'UK',
+    title: '₹7200',
+    avatarText: 'AP',
     trendNumber: '6.2%',
     avatarColor: 'error',
     trend: <ChevronDown sx={{ color: 'error.main', fontWeight: 600 }} />
   },
   {
-    sales: '148k',
-    title: '$865k',
+    sales: '148K',
+    title: '₹9100',
     trendDir: 'up',
-    avatarText: 'IN',
-    subtitle: 'India',
+    avatarText: 'DL',
+    subtitle: 'Delhi',
     trendNumber: '12.4%',
     avatarColor: 'warning',
     trend: <ChevronUp sx={{ color: 'success.main', fontWeight: 600 }} />
   },
   {
-    sales: '86k',
-    title: '$745k',
+    sales: '86K',
+    title: '₹5600',
     trendDir: 'down',
-    avatarText: 'JA',
-    subtitle: 'Japan',
+    avatarText: 'KA',
+    subtitle: 'Karnataka',
     trendNumber: '11.9%',
     avatarColor: 'secondary',
     trend: <ChevronDown sx={{ color: 'error.main', fontWeight: 600 }} />
   },
   {
-    sales: '42k',
-    title: '$45k',
+    sales: '42K',
+    title: '₹9725',
     trendDir: 'up',
-    avatarText: 'KO',
-    subtitle: 'Korea',
+    avatarText: 'MH',
+    subtitle: 'Maharashtra',
     trendNumber: '16.2%',
     avatarColor: 'error',
     trend: <ChevronUp sx={{ color: 'success.main', fontWeight: 600 }} />
@@ -86,7 +86,7 @@ const SalesByCountries = () => {
   return (
     <Card>
       <CardHeader
-        title='Sales by Countries'
+        title='Sales by State'
         titleTypographyProps={{ sx: { lineHeight: '1.2 !important', letterSpacing: '0.31px !important' } }}
         action={
           <IconButton size='small' aria-label='settings' className='card-more-options' sx={{ color: 'text.secondary' }}>
