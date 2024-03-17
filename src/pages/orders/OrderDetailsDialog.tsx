@@ -1,100 +1,138 @@
+import React, { useEffect, useState } from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
-import { Grid, Typography, Select, MenuItem, SelectChangeEvent, TextField, FormControl, InputLabel } from '@mui/material';
-import { useState } from 'react';
+import { CircularProgress, FormControl, Grid, InputLabel, MenuItem, Select, SelectChangeEvent, Typography } from '@mui/material';
 
-interface Order {
-    date: string;
-    orderNo: string;
-    product: string;
-    customer: string;
-    amount: number;
-    status: string;
-    technologyUsed: string;
-    materialUsed: string;
+interface ApiOrderDetails {
+  customization: {
+    technology: string;
+    material: string;
     layerThickness: string;
+    filling: number;
+    colorFinish: string;
+    scale: number;
+    printerOption: string;
+  };
+  deliveryInstructions: {
     deliveryType: string;
-    customerName: string;
-    customerAddress: string;
-    customerEmail: string;
-    customerPhone: string;
+    cname: string;
+    address: string;
+    pincode: string;
+    expertAssistance: string;
+    email: string;
+    phone: string;
+    shippingMethod: string;
+  };
+  printInfo: {
+    filamentWeight: number;
+    printTime: number;
+  };
+  printPrices: {
+    printByWeight: number;
+    printByTime: number;
+    colorPrice: number;
+    printProduction: number;
+    finalProductionPrice: number;
+    printPostProduction: number;
+  };
+  _id: string;
+  orderId: string;
+  filePath: string;
+  quantity: number;
+  status: string;
+  progress: string;
+  tokenUsed: boolean;
+  __v: number;
+  uploadToken: string;
 }
 
 interface OrderDetailsDialogProps {
-    open: boolean;
-    onClose: () => void;
-    order: Order;
-    updateOrderStatus: (orderNo: string, status: string) => void;
+  open: boolean;
+  onClose: () => void;
+  orderId: string;
+  updateOrderStatus: (orderId: string, newStatus: string) => void;
 }
 
-const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({ open, onClose, order, updateOrderStatus }) => {
-  const [status, setStatus] = useState(order.status);
+const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
+  open,
+  onClose,
+  orderId,
+  updateOrderStatus,
+}) => {
+  const [orderDetails, setOrderDetails] = useState<ApiOrderDetails | null>(null);
+  const [status, setStatus] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const handleStatusChange = (event: SelectChangeEvent<string>) => {
+  useEffect(() => {
+    const fetchOrderDetails = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(`http://localhost:3000/api/private/orders/${orderId}`, {
+          method: 'GET', // Optional: method is GET by default
+          headers: {
+            'Content-Type': 'application/json',
+            // Include other headers as required, e.g., authorization headers
+          },
+        });
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data: ApiOrderDetails = await response.json();
+        setOrderDetails(data);
+        setStatus(data.status);
+      } catch (error) {
+        console.error('Failed to fetch order details:', error);
+        // Optionally handle the error state here, e.g., showing an error message
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (orderId && open) {
+      fetchOrderDetails();
+    }
+  }, [orderId, open]);
+
+  const handleStatusChange = (event: SelectChangeEvent) => {
     const newStatus = event.target.value;
     setStatus(newStatus);
-    updateOrderStatus(order.orderNo, newStatus);
+    // Optionally update the status on the server side here
+    updateOrderStatus(orderId, newStatus);
   };
 
-  return (
-    <Dialog open={open} onClose={onClose} fullWidth={true} maxWidth="xl" PaperProps={{ style: { maxHeight: '90vh' } }}>
-      <DialogTitle>Order Details</DialogTitle>
-      <DialogContent dividers={true}>
-        <Grid container spacing={4}>
-          <Grid item xs={12} md={4}>
-            <img src="https://picsum.photos/200/300" alt="Order Item" style={{ maxWidth: '100%', height: 'auto' }} />
-          </Grid>
-          <Grid item xs={12} md={8}>
-            <Grid container spacing={4}>
-              <Grid item xs={12} lg={6}>
-                <Typography gutterBottom variant="h6">Order Information</Typography>
-                <Typography variant="body1">Date: {order.date}</Typography>
-                <Typography variant="body1">Order Number: {order.orderNo}</Typography>
-                <Typography variant="body1">Product: {order.product}</Typography>
-                <Typography variant="body1">Customer: {order.customer}</Typography>
-                <Typography variant="body1">
-                  Amount: {order.amount.toLocaleString('en-US', { style: 'currency', currency: 'INR' })}
-                </Typography>
+  if (loading || !orderDetails) {
+    return (
+      <Dialog open={open} onClose={onClose}>
+        <DialogContent style={{ display: 'flex', justifyContent: 'center', padding: '24px' }}>
+          {loading ? <CircularProgress /> : "Order details not available."}
+        </DialogContent>
+      </Dialog>
+    );
+  }
 
-                <Typography gutterBottom variant="h6">Delivery Instructions</Typography>
-                <Typography variant="body1">Delivery Type: {order.deliveryType}</Typography>
-                <Typography variant="body1">Customer Name and Address: {order.customerName} - {order.customerAddress}</Typography>
-                <Typography variant="body1">Contact Information: {order.customerEmail} - {order.customerPhone}</Typography>
-              </Grid>
-              <Grid item xs={12} lg={6}>
-                <Typography gutterBottom variant="h6">Print Information</Typography>
-                <Typography variant="body1">Technology Used: {order.technologyUsed}</Typography>
-                <Typography variant="body1">Material Used: {order.materialUsed}</Typography>
-                <Typography variant="body1">Layer Thickness: {order.layerThickness}</Typography>
-              
-                <FormControl fullWidth>
-                  <InputLabel>Status</InputLabel>
-                  <Select
-                    value={status}
-                    label="Status"
-                    onChange={handleStatusChange}
-                  >
-                    <MenuItem value="Pending">Pending</MenuItem>
-                    <MenuItem value="Completed">Completed</MenuItem>
-                    <MenuItem value="Cancelled">Cancelled</MenuItem>
-                    <MenuItem value="OnHold">OnHold</MenuItem>
-                  </Select>
-                </FormControl>
-              
-              
-                <TextField
-                  label="Notes"
-                  variant="outlined"
-                  fullWidth
-                  multiline
-                  rows={4}
-                  style={{ marginTop: '1rem' }}
-                />
-              </Grid>
-            </Grid>
+  return (
+    <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
+      <DialogTitle>Order Details - {orderId}</DialogTitle>
+      <DialogContent>
+        <Grid container spacing={2}>
+          {/* Example of displaying some details */}
+          <Grid item xs={12}>
+            <Typography>Technology: {orderDetails.customization.technology}</Typography>
+            {/* Display other order details as needed */}
+          </Grid>
+          <Grid item xs={12}>
+            <FormControl fullWidth>
+              <InputLabel>Status</InputLabel>
+              <Select value={status} onChange={handleStatusChange}>
+                <MenuItem value="Pending">Pending</MenuItem>
+                <MenuItem value="Completed">Completed</MenuItem>
+                <MenuItem value="Cancelled">Cancelled</MenuItem>
+                <MenuItem value="OnHold">OnHold</MenuItem>
+              </Select>
+            </FormControl>
           </Grid>
         </Grid>
       </DialogContent>

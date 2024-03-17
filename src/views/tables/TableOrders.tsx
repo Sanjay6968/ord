@@ -1,85 +1,128 @@
-import * as React from 'react';
-import { useState } from 'react';
-import { DataGrid, GridColDef, GridValueGetterParams, GridRowParams } from '@mui/x-data-grid';
+import React, { useEffect, useState } from 'react';
+import { DataGrid, GridColDef, GridRowParams } from '@mui/x-data-grid';
 import { Chip } from '@mui/material';
 import OrderDetailsDialog from 'src/pages/orders/OrderDetailsDialog';
 
-interface Order {
-  id: number;
-  date: string;
-  orderNo: string;
-  product: string;
-  customer: string;
-  amount: number;
+interface ApiOrder {
+  customization: {
+    technology: string;
+    material: string;
+    layerThickness: string;
+    filling: number;
+    colorFinish: string;
+    scale: number;
+    printerOption: string;
+  };
+  deliveryInstructions: {
+    deliveryType: string;
+    cname: string;
+    address: string;
+    pincode: string;
+    expertAssistance: string;
+    email: string;
+    phone: string;
+    shippingMethod: string;
+  };
+  printInfo: {
+    filamentWeight: number;
+    printTime: number;
+  };
+  printPrices: {
+    printByWeight: number;
+    printByTime: number;
+    colorPrice: number;
+    printProduction: number;
+    finalProductionPrice: number;
+    printPostProduction: number;
+  };
+  _id: string;
+  orderId: string;
+  filePath: string;
+  quantity: number;
   status: string;
-  technologyUsed: string;
-  materialUsed: string;
-  layerThickness: string;
-  deliveryType: string;
-  customerName: string;
-  customerAddress: string;
-  customerEmail: string;
-  customerPhone: string;
+  progress: string;
+  tokenUsed: boolean;
+  __v: number;
+  uploadToken: string;
 }
 
-const statusColors: { [key: string]: 'error' | 'success' | 'warning' | 'info'} = {
-  Pending: 'warning',
-  Completed: 'success',
-  Cancelled: 'error',
-  OnHold: 'info',
-};
+interface Order {
+  id: string; // Mapped from _id
+  orderNo: string;
+  customer: string; // Mapped from deliveryInstructions.cname
+  phone: string;
+  price: number;
+  delivery_type: string;
+  status: string;
+}
 
 const columns: GridColDef[] = [
-  { field: 'date', headerName: 'Date', flex: 1 },
-  { field: 'orderNo', headerName: 'Order Number', flex: 1 },
-  { field: 'product', headerName: 'Product', flex: 1 },
+  { field: 'orderNo', headerName: 'Order No.', flex: 1 },
   { field: 'customer', headerName: 'Customer', flex: 1 },
-  { 
-    field: 'amount', 
-    headerName: 'Amount', 
-    flex: 1,
-    valueGetter: (params: GridValueGetterParams) =>
-      `${params.value.toLocaleString('en-US')}`,
-  },
-  { 
-    field: 'status', 
-    headerName: 'Status', 
+  { field: 'phone', headerName: 'Mobile No.', flex: 1 },
+  { field: 'price', headerName: 'Final Price', flex: 1 },
+  { field: 'delivery_type', headerName: 'Delivery', flex: 1 },
+  {
+    field: 'status',
+    headerName: 'Status',
     flex: 1,
     renderCell: (params) => {
-      
-      const color = statusColors[params.value as keyof typeof statusColors] || 'default';
+      const statusColors: { [key: string]: 'error' | 'success' | 'warning' | 'info' } = {
+        pending: 'warning',
+        completed: 'success',
+        cancelled: 'error',
+        onHold: 'info',
+      };
+      const color = statusColors[params.value.toLowerCase() as keyof typeof statusColors] || 'default';
       
       return <Chip label={params.value} color={color} />;
-      
     },
   },
-];
-
-const initialRows: Order[] = [
-  { id: 1, date: '2024-02-28', orderNo: 'OR001', product: 'Product A', customer: 'Customer 1', amount: 100, status: 'Pending', technologyUsed: '', materialUsed: '', layerThickness: '', deliveryType: '', customerName: '', customerAddress: '', customerEmail: '', customerPhone: ''},
-  { id: 2, date: '2024-02-27', orderNo: 'OR002', product: 'Product B', customer: 'Customer 2', amount: 200, status: 'Completed', technologyUsed: '', materialUsed: '', layerThickness: '', deliveryType: '', customerName: '', customerAddress: '', customerEmail: '', customerPhone: '' },
-  { id: 3, date: '2024-02-26', orderNo: 'OR003', product: 'Product C', customer: 'Customer 3', amount: 150, status: 'Pending', technologyUsed: '', materialUsed: '', layerThickness: '', deliveryType: '', customerName: '', customerAddress: '', customerEmail: '', customerPhone: '' },
-  { id: 4, date: '2024-02-25', orderNo: 'OR004', product: 'Product D', customer: 'Customer 4', amount: 300, status: 'OnHold', technologyUsed: '', materialUsed: '', layerThickness: '', deliveryType: '', customerName: '', customerAddress: '', customerEmail: '', customerPhone: '' },
-  { id: 5, date: '2024-02-24', orderNo: 'OR005', product: 'Product E', customer: 'Customer 5', amount: 400, status: 'Cancelled', technologyUsed: '', materialUsed: '', layerThickness: '', deliveryType: '', customerName: '', customerAddress: '', customerEmail: '', customerPhone: '' },
+  
 ];
 
 export default function DataTable() {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
-  const [orders, setOrders] = useState<Order[]>(initialRows);
+  const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
+  const [orders, setOrders] = useState<Order[]>([]);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/api/private/orders');
+        const data: ApiOrder[] = await response.json();
+        const mappedOrders = data.map((order) => ({
+          id: order._id,
+          orderNo: order.orderId,
+          customer: order.deliveryInstructions.cname,
+          phone: order.deliveryInstructions.phone,
+          price: order.printPrices.finalProductionPrice,
+          delivery_type: order.deliveryInstructions.deliveryType,
+          status: order.status,
+          
+        }));
+        
+        setOrders(mappedOrders);
+      } catch (error) {
+        console.error('Failed to fetch orders:', error);
+      }
+    };
+
+    fetchOrders();
+ }, []);
 
   const handleRowClick = (params: GridRowParams) => {
-    setSelectedOrder(params.row);
+    setSelectedOrderId(params.row.id); // Use the order ID to fetch details
+    
     setDialogOpen(true);
   };
 
-  const updateOrderStatus = (orderNo: string, newStatus: string) => {
-    setOrders((prevOrders) =>
-    prevOrders ? prevOrders.map((order: Order) =>
-        order.orderNo === orderNo ? { ...order, status: newStatus } : order
-      ) : []
-    );
-  };
+  const updateOrderStatus = (id: string, newStatus: string) => {
+    // Implement the logic to update the order status
+    // This function should ideally make an API call to update the status in the backend
+    // For now, it just updates the state locally
+    setOrders(orders.map(order => order.id === id ? { ...order, status: newStatus } : order));
+ };
 
   return (
     <div style={{ height: 400, width: '100%' }}>
@@ -90,11 +133,12 @@ export default function DataTable() {
         disableRowSelectionOnClick
         onRowClick={handleRowClick}
       />
-      {selectedOrder && (
+      
+      {selectedOrderId && (
         <OrderDetailsDialog
           open={dialogOpen}
           onClose={() => setDialogOpen(false)}
-          order={selectedOrder}
+          orderId={selectedOrderId} // Pass the selected order ID
           updateOrderStatus={updateOrderStatus}
         />
       )}
