@@ -5,6 +5,10 @@ import { Router } from 'next/router'
 import type { NextPage } from 'next'
 import type { AppProps } from 'next/app'
 
+// ** Clerk Imports
+import { ClerkProvider } from '@clerk/nextjs'
+import {shadesOfPurple} from "@clerk/themes";
+
 // ** Loader Import
 import NProgress from 'nprogress'
 
@@ -72,6 +76,11 @@ const App = (props: ExtendedAppProps) => {
   const getLayout = Component.getLayout ?? (page => <UserLayout>{page}</UserLayout>)
 
   return (
+    <ClerkProvider appearance={{
+      baseTheme: shadesOfPurple,
+      layout: {
+      socialButtonsPlacement: 'bottom',
+    }}}>
     <div>
       <CacheProvider value={emotionCache}>
         <Head>
@@ -96,6 +105,7 @@ const App = (props: ExtendedAppProps) => {
         </SettingsProvider>
       </CacheProvider>
     </div>
+    </ClerkProvider>
   )
 }
 
