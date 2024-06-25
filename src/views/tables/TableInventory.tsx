@@ -23,7 +23,7 @@ const columns: GridColDef[] = [
     headerName: 'Price per Unit', 
     flex: 1,
     type: 'number',
-    valueFormatter: ({ value }) => `₹${value.toFixed(2)}`,
+    valueFormatter: ({ value }: { value: number }) => `₹${value.toFixed(2)}`,
   },
   { field: 'supplier', headerName: 'Supplier/Manufacturer', flex: 1 },
 ];

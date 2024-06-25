@@ -4,51 +4,22 @@ import { Chip } from '@mui/material';
 import OrderDetailsDialog from 'src/pages/orders/OrderDetailsDialog';
 
 interface ApiOrder {
-  customization: {
-    technology: string;
-    material: string;
-    layerThickness: string;
-    filling: number;
-    colorFinish: string;
-    scale: number;
-    printerOption: string;
-  };
-  deliveryInstructions: {
-    deliveryType: string;
-    cname: string;
-    address: string;
-    pincode: string;
-    expertAssistance: string;
-    email: string;
-    phone: string;
-    shippingMethod: string;
-  };
-  printInfo: {
-    filamentWeight: number;
-    printTime: number;
-  };
-  printPrices: {
-    printByWeight: number;
-    printByTime: number;
-    colorPrice: number;
-    printProduction: number;
-    finalProductionPrice: number;
-    printPostProduction: number;
-  };
   _id: string;
   orderId: string;
-  filePath: string;
-  quantity: number;
+  deliveryInstructions: {
+    cname: string;
+    phone: string;
+    deliveryType: string;
+  };
+  printPrices: {
+    totalFinalAmount: number;
+  };
   status: string;
-  progress: string;
-  tokenUsed: boolean;
-  __v: number;
-  uploadToken: string;
 }
 
 interface Order {
   id: string; // Mapped from _id
-  orderNo: string;
+  orderId: string;
   customer: string; // Mapped from deliveryInstructions.cname
   phone: string;
   price: number;
@@ -57,14 +28,14 @@ interface Order {
 }
 
 const columns: GridColDef[] = [
-  { field: 'orderNo', headerName: 'Order No.', flex: 1 },
-  { field: 'customer', headerName: 'Customer', flex: 1 },
+  { field: 'orderId', headerName: 'Order ID', flex: 1 },
+  { field: 'customer', headerName: 'Customer Name', flex: 1 },
   { field: 'phone', headerName: 'Mobile No.', flex: 1 },
-  { field: 'price', headerName: 'Final Price', flex: 1 },
+  { field: 'price', headerName: 'Final Amount', flex: 1 },
   { field: 'delivery_type', headerName: 'Delivery', flex: 1 },
   {
     field: 'status',
-    headerName: 'Status',
+    headerName: 'Order Status',
     flex: 1,
     renderCell: (params) => {
       const statusColors: { [key: string]: 'error' | 'success' | 'warning' | 'info' } = {
@@ -92,14 +63,13 @@ export default function DataTable() {
         const response = await fetch('http://localhost:3000/api/private/orders');
         const data: ApiOrder[] = await response.json();
         const mappedOrders = data.map((order) => ({
-          id: order._id,
-          orderNo: order.orderId,
-          customer: order.deliveryInstructions.cname,
-          phone: order.deliveryInstructions.phone,
-          price: order.printPrices.finalProductionPrice,
-          delivery_type: order.deliveryInstructions.deliveryType,
+          id: order.orderId,
+          orderId: order.orderId,
+          customer: order.deliveryInstructions?.cname || 'N/A',
+          phone: order.deliveryInstructions?.phone || 'N/A',
+          price: order.printPrices?.totalFinalAmount || 0,
+          delivery_type: order.deliveryInstructions?.deliveryType || 'N/A',
           status: order.status,
-          
         }));
         
         setOrders(mappedOrders);
