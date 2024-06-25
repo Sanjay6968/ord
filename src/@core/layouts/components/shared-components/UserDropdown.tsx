@@ -18,8 +18,8 @@ import Typography from '@mui/material/Typography'
 import CogOutline from 'mdi-material-ui/CogOutline'
 import LogoutVariant from 'mdi-material-ui/LogoutVariant'
 
-//Next Auth Login
-import { signOut } from "next-auth/react";
+//Clerk Imports
+import { useClerk } from "@clerk/clerk-react";
 
 // ** Styled Components
 const BadgeContentSpan = styled('span')(({ theme }) => ({
@@ -35,6 +35,7 @@ const UserDropdown = () => {
   const [anchorEl, setAnchorEl] = useState<Element | null>(null)
 
   // ** Hooks
+  const { signOut } = useClerk();
   const router = useRouter()
 
   const handleDropdownOpen = (event: SyntheticEvent) => {
@@ -119,7 +120,9 @@ const UserDropdown = () => {
 
         {/* <Divider /> */}
 
-        <MenuItem sx={{ py: 2 }} onClick={() => {handleDropdownClose(); signOut({ callbackUrl: '/login' });}}>
+        <MenuItem sx={{ py: 2 }} onClick={() => {handleDropdownClose(); 
+
+          signOut(() => router.push("/sign-in"));}}>
           <LogoutVariant sx={{ marginRight: 2, fontSize: '1.375rem', color: 'text.secondary' }} />
           Logout
         </MenuItem>

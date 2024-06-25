@@ -58,3 +58,33 @@ code[class*='language-'] {
   background-color: stone-500;
   border-radius: rounded-xl;
 }
+
+.cl-card {
+  font-size: 14px;
+  text-transform: none;
+  background-color: #fff;
+  box-shadow: none; /* Removes any shadow effects */
+  border: none; /* Removes the border */
+}
+
+.cl-headerTitle {
+  display: none;
+  color: #000;
+}
+
+.cl-headerSubtitle {
+  display: none;
+  color: #000;
+}
+
+.cl-socialButtonsBlockButtonText {
+  color: #000;
+}
+
+.cl-providerIcon__github {
+  color: #000;
+}
+
+.cl-internal-9tfui4 {
+  display: none;
+}
