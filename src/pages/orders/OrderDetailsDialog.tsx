@@ -5,7 +5,12 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import AccountOutlineIcon from 'mdi-material-ui/AccountOutline';
+import EmailOutlineIcon from 'mdi-material-ui/EmailOutline';
+import PhoneOutlineIcon from 'mdi-material-ui/PhoneOutline';
+import MapMarkerOutlineIcon from 'mdi-material-ui/MapMarkerOutline';
+import TruckIcon from 'mdi-material-ui/Truck';
 import { CircularProgress, Grid, Typography, TextField, Card, CardContent, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, useMediaQuery, useTheme } from '@mui/material';
+import ColorBox from 'src/@core/layouts/components/shared-components/ColorBox';
 
 interface ApiOrderDetails {
   customization: {
@@ -51,6 +56,36 @@ interface ApiOrderDetails {
   createdAt: string;
   updatedAt: string;
 }
+
+const colorOptions = [
+  { label: 'White', value: 'White', color: '#FFFFFF' },
+  { label: 'Black', value: 'Black', color: '#000000' },
+  { label: 'Grey', value: 'Grey', color: '#808080' },
+  { label: 'Dark Grey', value: 'Dark Grey', color: '#A9A9A9' },
+  { label: 'Silver', value: 'Silver', color: '#C0C0C0' },
+  { label: 'Gold', value: 'Gold', color: '#FFD700' },
+  { label: 'Skin', value: 'Skin', color: '#FFDAB9' },
+  { label: 'Natural', value: 'Natural', color: '#F5DEB3' },
+  { label: 'Brown', value: 'Brown', color: '#A52A2A' },
+  { label: 'Pink', value: 'Pink', color: '#FFC0CB' },
+  { label: 'Red', value: 'Red', color: '#FF0000' },
+  { label: 'Orange', value: 'Orange', color: '#FFA500' },
+  { label: 'Yellow', value: 'Yellow', color: '#FFFF00' },
+  { label: 'Lime Green', value: 'Lime Green', color: '#32CD32' },
+  { label: 'Green', value: 'Green', color: '#008000' },
+  { label: 'Sky Blue', value: 'Sky Blue', color: '#87CEEB' },
+  { label: 'Blue', value: 'Blue', color: '#0000FF' },
+  { label: 'Purple', value: 'Purple', color: '#800080' },
+  { label: 'Glow in Dark', value: 'Glow in Dark', color: '#FFFF00' },
+  { label: 'Glitter Green', value: 'Glitter Green', color: '#008000' },
+  { label: 'Rainbow', value: 'Rainbow', color: 'linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet)' },
+  { label: 'Carbon Fiber', value: 'Carbon Fiber', color: '#333333' },
+];
+
+const getColorByLabel = (label: string) => {
+  const colorOption = colorOptions.find(option => option.label === label);
+  return colorOption ? colorOption.color : '#FFFFFF';
+};
 
 interface OrderDetailsDialogProps {
   open: boolean;
@@ -113,7 +148,7 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
 
   const isValidDate = (dateString: string) => {
     const date = new Date(dateString);
-    
+
     return !isNaN(date.getTime());
   };
 
@@ -172,16 +207,16 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
                       <div>
                         <Typography variant="h5" gutterBottom>{orderDetails.originalFileName}</Typography>
                         {isMobile && thumbnailUrl && (
-                          <img src={thumbnailUrl} alt="Thumbnail" style={{ maxWidth: '150px', height: 'auto', marginTop: '8px', marginBottom: '8px' }} />
+                          <img src={thumbnailUrl} alt="Thumbnail" style={{ maxWidth: '150px', height: 'auto', marginTop: '8px', marginBottom: '8px', border: '1px solid rgba(0, 0, 0, 0.1)' }} />
                         )}
                         <Typography>Technology: {orderDetails.customization?.technology || 'N/A'}</Typography>
                         <Typography>Material: {orderDetails.customization?.material || 'N/A'}</Typography>
-                        <Typography>Color Finish: {orderDetails.customization?.colorFinish || 'N/A'}</Typography>
+                        <ColorBox label={orderDetails.customization?.colorFinish || 'N/A'} color={getColorByLabel(orderDetails.customization?.colorFinish)} />
                         <Typography>Dimensions: {orderDetails.dimensions?.length || 0} mm x {orderDetails.dimensions?.breadth || 0} mm x {orderDetails.dimensions?.height || 0} mm</Typography>
                         <Typography>Volume: {orderDetails.dimensions?.volume || 0} mm³</Typography>
                       </div>
                       {!isMobile && thumbnailUrl && (
-                        <img src={thumbnailUrl} alt="Thumbnail" style={{ maxWidth: '150px', height: 'auto', marginLeft: '16px' }} />
+                        <img src={thumbnailUrl} alt="Thumbnail" style={{ maxWidth: '150px', height: 'auto', marginLeft: '16px', border: '1px solid rgba(0, 0, 0, 0.1)' }} />
                       )}
                     </div>
                   </CardContent>
@@ -285,8 +320,14 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
                       <AccountOutlineIcon style={{ marginRight: '8px' }} />
                       <Typography>{orderDetails.deliveryInstructions?.cname || 'N/A'}</Typography>
                     </div>
-                    <Typography>Email: {orderDetails.deliveryInstructions?.email || 'N/A'}</Typography>
-                    <Typography>Phone: {orderDetails.deliveryInstructions?.phone || 'N/A'}</Typography>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <EmailOutlineIcon style={{ marginRight: '8px' }} />
+                      <Typography>{orderDetails.deliveryInstructions?.email || 'N/A'}</Typography>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <PhoneOutlineIcon style={{ marginRight: '8px' }} />
+                      <Typography>{orderDetails.deliveryInstructions?.phone || 'N/A'}</Typography>
+                    </div>
                   </CardContent>
                 </Card>
               </Grid>
@@ -295,8 +336,14 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
                 <Card>
                   <CardContent>
                     <Typography variant="h6">Contact Information</Typography>
-                    <Typography>Email: {orderDetails.deliveryInstructions?.email || 'N/A'}</Typography>
-                    <Typography>Phone: {orderDetails.deliveryInstructions?.phone || 'N/A'}</Typography>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <EmailOutlineIcon style={{ marginRight: '8px' }} />
+                      <Typography>{orderDetails.deliveryInstructions?.email || 'N/A'}</Typography>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <PhoneOutlineIcon style={{ marginRight: '8px' }} />
+                      <Typography>{orderDetails.deliveryInstructions?.phone || 'N/A'}</Typography>
+                    </div>
                   </CardContent>
                 </Card>
               </Grid>
@@ -305,9 +352,18 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
                 <Card>
                   <CardContent>
                     <Typography variant="h6">Shipping Address</Typography>
-                    <Typography>Address: {orderDetails.deliveryInstructions?.address || 'N/A'}</Typography>
-                    <Typography>Pincode: {orderDetails.deliveryInstructions?.pincode || 'N/A'}</Typography>
-                    <Typography>Shipping Method: {orderDetails.deliveryInstructions?.shippingMethod || 'N/A'}</Typography>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <MapMarkerOutlineIcon style={{ marginRight: '8px' }} />
+                      <Typography>{orderDetails.deliveryInstructions?.address || 'N/A'}</Typography>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <Typography style={{ marginRight: '8px' }}>Pincode:</Typography>
+                      <Typography>{orderDetails.deliveryInstructions?.pincode || 'N/A'}</Typography>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <TruckIcon style={{ marginRight: '8px' }} />
+                      <Typography>Shipping Method: {orderDetails.deliveryInstructions?.shippingMethod || 'N/A'}</Typography>
+                    </div>
                   </CardContent>
                 </Card>
               </Grid>
