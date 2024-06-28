@@ -4,6 +4,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
+import AccountOutlineIcon from 'mdi-material-ui/AccountOutline';
 import { CircularProgress, Grid, Typography, TextField, Card, CardContent, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, useMediaQuery, useTheme } from '@mui/material';
 
 interface ApiOrderDetails {
@@ -75,6 +76,7 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
   useEffect(() => {
     const fetchOrderDetails = async () => {
       setLoading(true);
+      
       try {
         const response = await fetch(`http://localhost:3000/api/private/orders/${orderId}`, {
           method: 'GET',
@@ -82,14 +84,20 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
             'Content-Type': 'application/json',
           },
         });
+        
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
         const data: { order: ApiOrderDetails, thumbnailUrl: string } = await response.json();
+        
         const validDate = isValidDate(data.order.createdAt) ? new Date(data.order.createdAt).toISOString() : 'Invalid date';
+        
         data.order.createdAt = validDate;
+        
         setOrderDetails(data.order);
+        
         setThumbnailUrl(data.thumbnailUrl);
+        
         setStatus(data.order.status);
       } catch (error) {
         console.error('Failed to fetch order details:', error);
@@ -105,12 +113,15 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
 
   const isValidDate = (dateString: string) => {
     const date = new Date(dateString);
+    
     return !isNaN(date.getTime());
   };
 
   const handleStatusChange = (event: SelectChangeEvent) => {
     const newStatus = event.target.value;
+    
     setStatus(newStatus);
+    
     updateOrderStatus(orderId, newStatus);
   };
 
@@ -126,9 +137,11 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
 
   const formatCreationTime = (createdAt: string) => {
     const date = new Date(createdAt);
+    
     if (isNaN(date.getTime())) {
       return 'Invalid date';
     }
+    
     return new Intl.DateTimeFormat('en-US', {
       month: 'long',
       day: 'numeric',
@@ -268,7 +281,10 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
                 <Card>
                   <CardContent>
                     <Typography variant="h6">Customers</Typography>
-                    <Typography>Name: {orderDetails.deliveryInstructions?.cname || 'N/A'}</Typography>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <AccountOutlineIcon style={{ marginRight: '8px' }} />
+                      <Typography>{orderDetails.deliveryInstructions?.cname || 'N/A'}</Typography>
+                    </div>
                     <Typography>Email: {orderDetails.deliveryInstructions?.email || 'N/A'}</Typography>
                     <Typography>Phone: {orderDetails.deliveryInstructions?.phone || 'N/A'}</Typography>
                   </CardContent>

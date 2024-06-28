@@ -39,8 +39,10 @@ const rows = [
 export default function TableInventory() {
     const [dialogOpen, setDialogOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
+    
     const handleRowClick = (params: GridRowParams) => {
         setSelectedItem(params.row);
+        
         setDialogOpen(true);
     };
 

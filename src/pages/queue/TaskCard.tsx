@@ -37,6 +37,7 @@ function TaskCard({ task, deleteTask, updateTask }: Props) {
 
   const toggleEditMode = () => {
     setEditMode((prev) => !prev);
+    
     setMouseIsOver(false);
   };
 

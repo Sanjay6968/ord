@@ -77,6 +77,7 @@ export default function DataTable() {
 
     const handleRowClick = (params: GridRowParams) => {
         setSelectedOrderId(params.row.id);
+        
         setDialogOpen(true);
     };
 

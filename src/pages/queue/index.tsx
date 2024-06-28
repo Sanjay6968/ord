@@ -183,12 +183,14 @@ function PrintQueue() {
 
   function deleteTask(id: Id) {
     const newTasks = tasks.filter((task) => task.id !== id);
+    
     setTasks(newTasks);
   }
 
   function updateTask(id: Id, content: string) {
     const newTasks = tasks.map((task) => {
       if (task.id !== id) return task;
+      
       return { ...task, content };
     });
 
@@ -206,15 +208,18 @@ function PrintQueue() {
 
   function deleteColumn(id: Id) {
     const filteredColumns = columns.filter((col) => col.id !== id);
+    
     setColumns(filteredColumns);
 
     const newTasks = tasks.filter((t) => t.columnId !== id);
+    
     setTasks(newTasks);
   }
 
   function updateColumn(id: Id, title: string) {
     const newColumns = columns.map((col) => {
       if (col.id !== id) return col;
+      
       return { ...col, title };
     });
 
@@ -224,17 +229,20 @@ function PrintQueue() {
   function onDragStart(event: DragStartEvent) {
     if (event.active.data.current?.type === "Column") {
       setActiveColumn(event.active.data.current.column);
+      
       return;
     }
 
     if (event.active.data.current?.type === "Task") {
       setActiveTask(event.active.data.current.task);
+      
       return;
     }
   }
 
   function onDragEnd(event: DragEndEvent) {
     setActiveColumn(null);
+    
     setActiveTask(null);
 
     const { active, over } = event;
@@ -282,6 +290,7 @@ function PrintQueue() {
         if (tasks[activeIndex].columnId != tasks[overIndex].columnId) {
           // Fix introduced after video recording
           tasks[activeIndex].columnId = tasks[overIndex].columnId;
+          
           return arrayMove(tasks, activeIndex, overIndex - 1);
         }
 
@@ -297,7 +306,9 @@ function PrintQueue() {
         const activeIndex = tasks.findIndex((t) => t.id === activeId);
 
         tasks[activeIndex].columnId = overId;
+        
         console.log("DROPPING TASK OVER COLUMN", { activeIndex });
+        
         return arrayMove(tasks, activeIndex, activeIndex);
       });
     }
