@@ -12,6 +12,36 @@ import TruckIcon from 'mdi-material-ui/Truck';
 import { CircularProgress, Grid, Typography, TextField, Card, CardContent, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, useMediaQuery, useTheme } from '@mui/material';
 import ColorBox from 'src/@core/layouts/components/shared-components/ColorBox';
 
+const colorOptions = [
+  { label: 'White', value: 'White', color: '#FFFFFF' },
+  { label: 'Black', value: 'Black', color: '#000000' },
+  { label: 'Grey', value: 'Grey', color: '#808080' },
+  { label: 'Dark Grey', value: 'Dark Grey', color: '#A9A9A9' },
+  { label: 'Silver', value: 'Silver', color: '#C0C0C0' },
+  { label: 'Gold', value: 'Gold', color: '#FFD700' },
+  { label: 'Skin', value: 'Skin', color: '#FFDAB9' },
+  { label: 'Natural', value: 'Natural', color: '#F5DEB3' },
+  { label: 'Brown', value: 'Brown', color: '#A52A2A' },
+  { label: 'Pink', value: 'Pink', color: '#FFC0CB' },
+  { label: 'Red', value: 'Red', color: '#FF0000' },
+  { label: 'Orange', value: 'Orange', color: '#FFA500' },
+  { label: 'Yellow', value: 'Yellow', color: '#FFFF00' },
+  { label: 'Lime Green', value: 'Lime Green', color: '#32CD32' },
+  { label: 'Green', value: 'Green', color: '#008000' },
+  { label: 'Sky Blue', value: 'Sky Blue', color: '#87CEEB' },
+  { label: 'Blue', value: 'Blue', color: '#0000FF' },
+  { label: 'Purple', value: 'Purple', color: '#800080' },
+  { label: 'Glow in Dark', value: 'Glow in Dark', color: '#FFFF00' },
+  { label: 'Glitter Green', value: 'Glitter Green', color: '#008000' },
+  { label: 'Rainbow', value: 'Rainbow', color: 'linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet)' },
+  { label: 'Carbon Fiber', value: 'Carbon Fiber', color: '#333333' },
+];
+
+const getColorByLabel = (label: string) => {
+  const colorOption = colorOptions.find(option => option.label === label);
+  return colorOption ? colorOption.color : '#FFFFFF';
+};
+
 interface ApiOrderDetails {
   customization: {
     technology: string;
@@ -56,36 +86,6 @@ interface ApiOrderDetails {
   createdAt: string;
   updatedAt: string;
 }
-
-const colorOptions = [
-  { label: 'White', value: 'White', color: '#FFFFFF' },
-  { label: 'Black', value: 'Black', color: '#000000' },
-  { label: 'Grey', value: 'Grey', color: '#808080' },
-  { label: 'Dark Grey', value: 'Dark Grey', color: '#A9A9A9' },
-  { label: 'Silver', value: 'Silver', color: '#C0C0C0' },
-  { label: 'Gold', value: 'Gold', color: '#FFD700' },
-  { label: 'Skin', value: 'Skin', color: '#FFDAB9' },
-  { label: 'Natural', value: 'Natural', color: '#F5DEB3' },
-  { label: 'Brown', value: 'Brown', color: '#A52A2A' },
-  { label: 'Pink', value: 'Pink', color: '#FFC0CB' },
-  { label: 'Red', value: 'Red', color: '#FF0000' },
-  { label: 'Orange', value: 'Orange', color: '#FFA500' },
-  { label: 'Yellow', value: 'Yellow', color: '#FFFF00' },
-  { label: 'Lime Green', value: 'Lime Green', color: '#32CD32' },
-  { label: 'Green', value: 'Green', color: '#008000' },
-  { label: 'Sky Blue', value: 'Sky Blue', color: '#87CEEB' },
-  { label: 'Blue', value: 'Blue', color: '#0000FF' },
-  { label: 'Purple', value: 'Purple', color: '#800080' },
-  { label: 'Glow in Dark', value: 'Glow in Dark', color: '#FFFF00' },
-  { label: 'Glitter Green', value: 'Glitter Green', color: '#008000' },
-  { label: 'Rainbow', value: 'Rainbow', color: 'linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet)' },
-  { label: 'Carbon Fiber', value: 'Carbon Fiber', color: '#333333' },
-];
-
-const getColorByLabel = (label: string) => {
-  const colorOption = colorOptions.find(option => option.label === label);
-  return colorOption ? colorOption.color : '#FFFFFF';
-};
 
 interface OrderDetailsDialogProps {
   open: boolean;
@@ -203,21 +203,28 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
                 <Card>
                   <CardContent>
                     <Typography variant="h6">Order Item</Typography>
-                    <div style={{ display: 'flex', alignItems: 'flex-start', flexDirection: isMobile ? 'column' : 'row', justifyContent: isMobile ? 'flex-start' : 'space-between' }}>
+                    <div style={{ display: isMobile ? 'block' : 'flex', alignItems: 'center' }}>
+                      {thumbnailUrl && (
+                        <img src={thumbnailUrl} alt="Thumbnail" style={{ maxWidth: '150px', height: 'auto', marginRight: isMobile ? '0' : '16px', marginBottom: isMobile ? '16px' : '0', border: '1px solid rgba(0, 0, 0, 0.1)' }} />
+                      )}
                       <div>
                         <Typography variant="h5" gutterBottom>{orderDetails.originalFileName}</Typography>
-                        {isMobile && thumbnailUrl && (
-                          <img src={thumbnailUrl} alt="Thumbnail" style={{ maxWidth: '150px', height: 'auto', marginTop: '8px', marginBottom: '8px', border: '1px solid rgba(0, 0, 0, 0.1)' }} />
-                        )}
-                        <Typography>Technology: {orderDetails.customization?.technology || 'N/A'}</Typography>
-                        <Typography>Material: {orderDetails.customization?.material || 'N/A'}</Typography>
-                        <ColorBox label={orderDetails.customization?.colorFinish || 'N/A'} color={getColorByLabel(orderDetails.customization?.colorFinish)} />
-                        <Typography>Dimensions: {orderDetails.dimensions?.length || 0} mm x {orderDetails.dimensions?.breadth || 0} mm x {orderDetails.dimensions?.height || 0} mm</Typography>
-                        <Typography>Volume: {orderDetails.dimensions?.volume || 0} mm³</Typography>
+                        <div style={{ display: 'flex', alignItems: isMobile ? 'flex-start' : 'center', flexDirection: isMobile ? 'column' : 'row' }}>
+                          <Typography>{orderDetails.customization?.technology}</Typography>
+                          <div style={{ margin: isMobile ? '4px 0' : '0 8px', width: isMobile ? '100%' : '1px', backgroundColor: 'rgba(0, 0, 0, 0.2)', height: isMobile ? '1px' : '16px' }}></div>
+                          <Typography>{orderDetails.customization?.material}</Typography>
+                          <div style={{ margin: isMobile ? '4px 0' : '0 8px', width: isMobile ? '100%' : '1px', backgroundColor: 'rgba(0, 0, 0, 0.2)', height: isMobile ? '1px' : '16px' }}></div>
+                          <ColorBox label={orderDetails.customization?.colorFinish || 'N/A'} color={getColorByLabel(orderDetails.customization?.colorFinish)} />
+                        </div>
+                        <div style={{ marginTop: isMobile ? '16px' : '8px' }}>
+                          <Typography variant="body1" style={{ fontWeight: 'bold' }}>Dimensions:</Typography>
+                          <Typography>{orderDetails.dimensions?.length || 0} mm x {orderDetails.dimensions?.breadth || 0} mm x {orderDetails.dimensions?.height || 0} mm</Typography>
+                        </div>
+                        <div style={{ marginTop: '8px' }}>
+                          <Typography variant="body1" style={{ fontWeight: 'bold' }}>Volume:</Typography>
+                          <Typography>{orderDetails.dimensions?.volume || 0} mm³</Typography>
+                        </div>
                       </div>
-                      {!isMobile && thumbnailUrl && (
-                        <img src={thumbnailUrl} alt="Thumbnail" style={{ maxWidth: '150px', height: 'auto', marginLeft: '16px', border: '1px solid rgba(0, 0, 0, 0.1)' }} />
-                      )}
                     </div>
                   </CardContent>
                 </Card>
