@@ -9,6 +9,8 @@ import EmailOutlineIcon from 'mdi-material-ui/EmailOutline';
 import PhoneOutlineIcon from 'mdi-material-ui/PhoneOutline';
 import MapMarkerOutlineIcon from 'mdi-material-ui/MapMarkerOutline';
 import TruckIcon from 'mdi-material-ui/Truck';
+import DownloadIcon from 'mdi-material-ui/Download';
+import IconButton from '@mui/material/IconButton';
 import { CircularProgress, Grid, Typography, TextField, Card, CardContent, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, useMediaQuery, useTheme } from '@mui/material';
 import ColorBox from 'src/@core/layouts/components/shared-components/ColorBox';
 
@@ -111,7 +113,7 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
   useEffect(() => {
     const fetchOrderDetails = async () => {
       setLoading(true);
-      
+
       try {
         const response = await fetch(`http://localhost:3000/api/private/orders/${orderId}`, {
           method: 'GET',
@@ -119,20 +121,20 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
             'Content-Type': 'application/json',
           },
         });
-        
+
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
         const data: { order: ApiOrderDetails, thumbnailUrl: string } = await response.json();
-        
+
         const validDate = isValidDate(data.order.createdAt) ? new Date(data.order.createdAt).toISOString() : 'Invalid date';
-        
+
         data.order.createdAt = validDate;
-        
+
         setOrderDetails(data.order);
-        
+
         setThumbnailUrl(data.thumbnailUrl);
-        
+
         setStatus(data.order.status);
       } catch (error) {
         console.error('Failed to fetch order details:', error);
@@ -154,9 +156,9 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
 
   const handleStatusChange = (event: SelectChangeEvent) => {
     const newStatus = event.target.value;
-    
+
     setStatus(newStatus);
-    
+
     updateOrderStatus(orderId, newStatus);
   };
 
@@ -172,11 +174,11 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
 
   const formatCreationTime = (createdAt: string) => {
     const date = new Date(createdAt);
-    
+
     if (isNaN(date.getTime())) {
       return 'Invalid date';
     }
-    
+
     return new Intl.DateTimeFormat('en-US', {
       month: 'long',
       day: 'numeric',
@@ -203,20 +205,28 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
                 <Card>
                   <CardContent>
                     <Typography variant="h6">Order Item</Typography>
-                    <div style={{ display: isMobile ? 'block' : 'flex', alignItems: 'center' }}>
+                    <div style={{ display: 'flex', alignItems: 'flex-start', flexDirection: isMobile ? 'column' : 'row' }}>
                       {thumbnailUrl && (
                         <img src={thumbnailUrl} alt="Thumbnail" style={{ maxWidth: '150px', height: 'auto', marginRight: isMobile ? '0' : '16px', marginBottom: isMobile ? '16px' : '0', border: '1px solid rgba(0, 0, 0, 0.1)' }} />
                       )}
-                      <div>
-                        <Typography variant="h5" gutterBottom>{orderDetails.originalFileName}</Typography>
-                        <div style={{ display: 'flex', alignItems: isMobile ? 'flex-start' : 'center', flexDirection: isMobile ? 'column' : 'row' }}>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', marginBottom: isMobile ? '16px' : '8px' }}>
+                          <Typography variant="h5" gutterBottom>{orderDetails.originalFileName}</Typography>
+                          <IconButton
+                            color="secondary"
+                            style={{ padding: '6px', marginLeft: '8px' }}
+                          >
+                            <DownloadIcon />
+                          </IconButton>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
                           <Typography>{orderDetails.customization?.technology}</Typography>
-                          <div style={{ margin: isMobile ? '4px 0' : '0 8px', width: isMobile ? '100%' : '1px', backgroundColor: 'rgba(0, 0, 0, 0.2)', height: isMobile ? '1px' : '16px' }}></div>
+                          <div style={{ margin: '0 8px', width: '1px', backgroundColor: 'rgba(0, 0, 0, 0.2)', height: '16px' }}></div>
                           <Typography>{orderDetails.customization?.material}</Typography>
-                          <div style={{ margin: isMobile ? '4px 0' : '0 8px', width: isMobile ? '100%' : '1px', backgroundColor: 'rgba(0, 0, 0, 0.2)', height: isMobile ? '1px' : '16px' }}></div>
+                          <div style={{ margin: '0 8px', width: '1px', backgroundColor: 'rgba(0, 0, 0, 0.2)', height: '16px' }}></div>
                           <ColorBox label={orderDetails.customization?.colorFinish || 'N/A'} color={getColorByLabel(orderDetails.customization?.colorFinish)} />
                         </div>
-                        <div style={{ marginTop: isMobile ? '16px' : '8px' }}>
+                        <div style={{ marginTop: '8px' }}>
                           <Typography variant="body1" style={{ fontWeight: 'bold' }}>Dimensions:</Typography>
                           <Typography>{orderDetails.dimensions?.length || 0} mm x {orderDetails.dimensions?.breadth || 0} mm x {orderDetails.dimensions?.height || 0} mm</Typography>
                         </div>
@@ -275,7 +285,7 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
                   </CardContent>
                 </Card>
               </Grid>
-              
+
               <Grid item xs={12}>
                 <Card>
                   <CardContent>
@@ -315,6 +325,12 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
                       variant="outlined"
                       margin="normal"
                     />
+                    <Button
+                      variant="contained"
+                      style={{ backgroundColor: '#FED700', color: "primary", marginTop: '8px' }}
+                    >
+                      Add Notes
+                    </Button>
                   </CardContent>
                 </Card>
               </Grid>
