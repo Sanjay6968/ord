@@ -297,10 +297,13 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
                         onChange={handleStatusChange}
                         label="Status"
                       >
-                        <MenuItem value="pending">Pending</MenuItem>
-                        <MenuItem value="completed">Completed</MenuItem>
-                        <MenuItem value="cancelled">Cancelled</MenuItem>
-                        <MenuItem value="onHold">On Hold</MenuItem>
+                        <MenuItem value="Confirmed">Confirmed</MenuItem>
+                        <MenuItem value="Printing Scheduled">Printing Scheduled</MenuItem>
+                        <MenuItem value="In Production">In Production</MenuItem>
+                        <MenuItem value="Post Processing">Post Processing</MenuItem>
+                        <MenuItem value="Dispatch">Dispatch</MenuItem>
+                        <MenuItem value="Delivered">Delivered</MenuItem>
+                        <MenuItem value="Cancelled">Cancelled</MenuItem>
                       </Select>
                     </FormControl>
                   </CardContent>

@@ -34,10 +34,13 @@ const columns: GridColDef[] = [
         flex: 1,
         renderCell: (params) => {
             const statusColors: { [key: string]: 'error' | 'success' | 'warning' | 'info' } = {
-                pending: 'warning',
-                completed: 'success',
+                confirmed: 'warning',
+                printingScheduled: 'info',
+                inProduction: 'info',
+                postProcessing: 'info',
+                dispatch: 'info',
+                delivered: 'success',
                 cancelled: 'error',
-                onHold: 'info',
             };
             const color = statusColors[params.value.toLowerCase() as keyof typeof statusColors] || 'default';
 
