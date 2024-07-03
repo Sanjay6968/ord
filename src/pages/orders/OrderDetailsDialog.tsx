@@ -104,6 +104,7 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
 }) => {
   const [orderDetails, setOrderDetails] = useState<ApiOrderDetails | null>(null);
   const [thumbnailUrl, setThumbnailUrl] = useState<string | null>(null);
+  const [modelUrl, setModelUrl] = useState<string | null>(null);
   const [status, setStatus] = useState<string>('');
   const [note, setNote] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -125,7 +126,7 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
-        const data: { order: ApiOrderDetails, thumbnailUrl: string } = await response.json();
+        const data: { order: ApiOrderDetails, thumbnailUrl: string, modelUrl: string } = await response.json();
 
         const validDate = isValidDate(data.order.createdAt) ? new Date(data.order.createdAt).toISOString() : 'Invalid date';
 
@@ -134,6 +135,8 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
         setOrderDetails(data.order);
 
         setThumbnailUrl(data.thumbnailUrl);
+
+        setModelUrl(data.modelUrl);
 
         setStatus(data.order.status);
       } catch (error) {
@@ -160,6 +163,12 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
     setStatus(newStatus);
 
     updateOrderStatus(orderId, newStatus);
+  };
+
+  const handleDownload = () => {
+    if (modelUrl) {
+      window.location.href = modelUrl;
+    }
   };
 
   if (loading || !orderDetails) {
@@ -215,6 +224,7 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
                           <IconButton
                             color="secondary"
                             style={{ padding: '6px', marginLeft: '8px' }}
+                            onClick={handleDownload}
                           >
                             <DownloadIcon />
                           </IconButton>
