@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { DataGrid, GridColDef, GridRowParams } from '@mui/x-data-grid';
 import { Chip } from '@mui/material';
-import OrderDetailsDialog from 'src/pages/admin/orders/OrderDetailsDialog';
+import PostProductionOrderDetailsDialog from 'src/pages/post-production/orders/PostProductionOrdersDetailDialog';
 
 interface ApiOrder {
     orderId: string;
@@ -102,7 +102,7 @@ export default function DataTable() {
             />
 
             {selectedOrderId && (
-                <OrderDetailsDialog
+                <PostProductionOrderDetailsDialog
                     open={dialogOpen}
                     onClose={() => setDialogOpen(false)}
                     orderId={selectedOrderId}

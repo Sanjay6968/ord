@@ -13,7 +13,7 @@ const Orders = () => {
     <Grid container spacing={6}>
       <Grid item xs={12}>
         <Typography variant='h5'>
-          <Link href='https://mui.com/components/tables/' target='_blank'>
+          <Link>
             Orders
           </Link>
         </Typography>
