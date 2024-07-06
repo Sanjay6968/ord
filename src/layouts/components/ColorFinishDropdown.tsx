@@ -1,23 +1,24 @@
 import React from 'react';
 import Select, { components, StylesConfig, OptionProps } from 'react-select';
-import { OptionType } from 'src/@core/components/card-statistics/types'
+import { OptionType } from 'src/@core/components/card-statistics/types';
 
 const customStyles: StylesConfig<OptionType, false> = {
   control: (base) => ({
     ...base,
-    backgroundColor: '#0a121e',
-    borderColor: '#fff',
-    minHeight: '48px',
+    backgroundColor: '#FFFFFF',
+    borderColor: '#ccc',
+    minHeight: '56px',
     fontSize: '1.3rem',
-    fontWeight: 700,
+    fontWeight: 300,
     borderRadius: '5px',
-    color: '#FFFFFF',
+    color: '#0a121e',
+    boxShadow: 'none',
   }),
-  option: (base, { data }) => ({
+  option: (base, { isFocused }) => ({
     ...base,
     fontSize: '1.3rem',
     color: '#0a121e',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: isFocused ? '#f0f0f0' : '#FFFFFF',
     borderBottom: '1px dotted #ccc',
     display: 'flex',
     alignItems: 'center',
@@ -25,14 +26,19 @@ const customStyles: StylesConfig<OptionType, false> = {
   }),
   singleValue: (base) => ({
     ...base,
-    color: '#FFFFFF',
+    color: '#0a121e',
   }),
   input: (base) => ({
     ...base,
-    color: '#FFFFFF',
+    color: '#0a121e',
   }),
   indicatorSeparator: () => ({
     display: 'none',
+  }),
+  menu: (base) => ({
+    ...base,
+    backgroundColor: '#FFFFFF',
+    zIndex: 9999,
   }),
 };
 

@@ -67,6 +67,16 @@ const ManualOrderDialog: React.FC<ManualOrderDialogProps> = ({ open, onClose }) 
     onClose();
   };
 
+  const statuses = [
+    "Confirmed",
+    "Printing Scheduled",
+    "In Production",
+    "Post Processing",
+    "Dispatch",
+    "Delivered",
+    "Cancelled"
+  ];
+
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="lg">
       <DialogTitle>Create Manual Order</DialogTitle>
@@ -80,6 +90,7 @@ const ManualOrderDialog: React.FC<ManualOrderDialogProps> = ({ open, onClose }) 
                 name="customer"
                 label="Customer Name"
                 type="text"
+                placeholder="Enter the full name"
                 fullWidth
                 value={orderData.customer}
                 onChange={handleChange}
@@ -91,6 +102,7 @@ const ManualOrderDialog: React.FC<ManualOrderDialogProps> = ({ open, onClose }) 
                 name="email"
                 label="Email"
                 type="email"
+                placeholder="Enter a valid email address"
                 fullWidth
                 value={orderData.email}
                 onChange={handleChange}
@@ -102,6 +114,7 @@ const ManualOrderDialog: React.FC<ManualOrderDialogProps> = ({ open, onClose }) 
                 name="phone"
                 label="Phone Number"
                 type="text"
+                placeholder="Enter the phone number"
                 fullWidth
                 value={orderData.phone}
                 onChange={handleChange}
@@ -113,21 +126,28 @@ const ManualOrderDialog: React.FC<ManualOrderDialogProps> = ({ open, onClose }) 
                 name="price"
                 label="Price"
                 type="number"
+                placeholder="Enter the price"
                 fullWidth
                 value={orderData.price}
                 onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField
-                margin="dense"
-                name="status"
-                label="Status"
-                type="text"
-                fullWidth
-                value={orderData.status}
-                onChange={handleChange}
-              />
+              <FormControl fullWidth margin="dense" variant="outlined">
+                <InputLabel>Status</InputLabel>
+                <Select
+                  value={orderData.status}
+                  onChange={handleSelectChange}
+                  name="status"
+                  label="Status"
+                >
+                  {statuses.map(status => (
+                    <MenuItem key={status} value={status}>
+                      {status}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
             </Grid>
           </Grid>
         </Box>
@@ -209,6 +229,7 @@ const ManualOrderDialog: React.FC<ManualOrderDialogProps> = ({ open, onClose }) 
                 name="infill"
                 label="Infill"
                 type="number"
+                placeholder="Enter infill percentage"
                 fullWidth
                 value={orderData.infill}
                 onChange={handleChange}
@@ -253,6 +274,7 @@ const ManualOrderDialog: React.FC<ManualOrderDialogProps> = ({ open, onClose }) 
                 name="address"
                 label="Address"
                 type="text"
+                placeholder="Enter delivery address"
                 fullWidth
                 value={orderData.address}
                 onChange={handleChange}
@@ -264,6 +286,7 @@ const ManualOrderDialog: React.FC<ManualOrderDialogProps> = ({ open, onClose }) 
                 name="pincode"
                 label="Pincode"
                 type="text"
+                placeholder="Enter pincode"
                 fullWidth
                 value={orderData.pincode}
                 onChange={handleChange}
@@ -281,6 +304,7 @@ const ManualOrderDialog: React.FC<ManualOrderDialogProps> = ({ open, onClose }) 
                 name="quantity"
                 label="Quantity"
                 type="number"
+                placeholder="Enter quantity"
                 fullWidth
                 value={orderData.quantity}
                 onChange={handleChange}
@@ -293,6 +317,7 @@ const ManualOrderDialog: React.FC<ManualOrderDialogProps> = ({ open, onClose }) 
                 name="gstNumber"
                 label="GST Number"
                 type="text"
+                placeholder="Enter GST number"
                 fullWidth
                 value={orderData.gstNumber}
                 onChange={handleChange}
