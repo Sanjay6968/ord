@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -13,7 +13,9 @@ import {
   Box,
   SelectChangeEvent,
   Typography,
-  Grid
+  Grid,
+  ToggleButton,
+  ToggleButtonGroup
 } from '@mui/material';
 import { TechnologyDropdown } from 'src/layouts/components/TechnologyDropdown';
 import { MaterialDropdown, getMaterialOptions } from 'src/layouts/components/MaterialDropdown';
@@ -30,6 +32,7 @@ const ManualOrderDialog: React.FC<ManualOrderDialogProps> = ({ open, onClose }) 
     phone: '',
     price: '',
     delivery_type: 'Standard',
+    shippingMethod: 'DTDC',
     expert_assistance: 'Not Required',
     customer_name: '',
     email: '',
@@ -44,7 +47,16 @@ const ManualOrderDialog: React.FC<ManualOrderDialogProps> = ({ open, onClose }) 
     colorFinish: 'White',
     quantity: 1,
     gstNumber: '',
+    originalFileName: '',
   });
+
+  useEffect(() => {
+    if (orderData.delivery_type === 'Standard') {
+      setOrderData(prevState => ({ ...prevState, shippingMethod: 'DTDC' }));
+    } else if (orderData.delivery_type === 'Express') {
+      setOrderData(prevState => ({ ...prevState, shippingMethod: 'BlueDart Express Air' }));
+    }
+  }, [orderData.delivery_type]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -62,9 +74,38 @@ const ManualOrderDialog: React.FC<ManualOrderDialogProps> = ({ open, onClose }) 
     });
   };
 
-  const handleCreateOrder = () => {
-    console.log('New Order Data:', orderData);
-    onClose();
+  const handleDeliveryTypeChange = (event: React.MouseEvent<HTMLElement>, newDeliveryType: string) => {
+    if (newDeliveryType !== null) {
+      setOrderData({ ...orderData, delivery_type: newDeliveryType });
+    }
+  };
+
+  const handleTechnologyChange = (event: React.MouseEvent<HTMLElement>, newTechnology: string) => {
+    if (newTechnology !== null) {
+      setOrderData({ ...orderData, technology: newTechnology });
+    }
+  };
+
+  const handleCreateOrder = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/api/private/order/createManualOrder', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(orderData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      console.log('Order created successfully:', data);
+      onClose();
+    } catch (error) {
+      console.error('Error creating order:', error);
+    }
   };
 
   const statuses = [
@@ -155,22 +196,32 @@ const ManualOrderDialog: React.FC<ManualOrderDialogProps> = ({ open, onClose }) 
         <Box mt={2}>
           <Typography variant="h6" gutterBottom>Customization</Typography>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <FormControl fullWidth margin="dense" variant="outlined">
-                <InputLabel>Technology</InputLabel>
-                <Select
-                  value={orderData.technology}
-                  onChange={handleSelectChange}
-                  name="technology"
-                  label="Technology"
-                >
-                  {['FDM', 'SLA', 'SLS', 'DLP', 'MJF'].map(option => (
-                    <MenuItem key={option} value={option}>
-                      {option}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+            <Grid item xs={12}>
+              <TextField
+                margin="dense"
+                name="originalFileName"
+                label="File Name"
+                type="text"
+                placeholder="Enter the file name"
+                fullWidth
+                value={orderData.originalFileName}
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant="body1">Technology</Typography>
+              <ToggleButtonGroup
+                value={orderData.technology}
+                exclusive
+                onChange={handleTechnologyChange}
+                aria-label="technology"
+              >
+                {['FDM', 'SLA', 'SLS', 'DLP', 'MJF'].map(option => (
+                  <ToggleButton key={option} value={option}>
+                    {option}
+                  </ToggleButton>
+                ))}
+              </ToggleButtonGroup>
             </Grid>
             <Grid item xs={12} sm={6}>
               <FormControl fullWidth margin="dense" variant="outlined">
@@ -251,24 +302,22 @@ const ManualOrderDialog: React.FC<ManualOrderDialogProps> = ({ open, onClose }) 
         <Box mt={2}>
           <Typography variant="h6" gutterBottom>Delivery Options</Typography>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <FormControl fullWidth margin="dense" variant="outlined">
-                <InputLabel>Delivery Type</InputLabel>
-                <Select
-                  value={orderData.delivery_type}
-                  onChange={handleSelectChange}
-                  name="delivery_type"
-                  label="Delivery Type"
-                >
-                  {['Standard', 'Express'].map(option => (
-                    <MenuItem key={option} value={option}>
-                      {option}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+            <Grid item xs={12}>
+              <Typography variant="body1">Delivery Type</Typography>
+              <ToggleButtonGroup
+                value={orderData.delivery_type}
+                exclusive
+                onChange={handleDeliveryTypeChange}
+                aria-label="delivery type"
+              >
+                {['Standard', 'Express'].map(option => (
+                  <ToggleButton key={option} value={option}>
+                    {option}
+                  </ToggleButton>
+                ))}
+              </ToggleButtonGroup>
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12}>
               <TextField
                 margin="dense"
                 name="address"
@@ -278,6 +327,18 @@ const ManualOrderDialog: React.FC<ManualOrderDialogProps> = ({ open, onClose }) 
                 fullWidth
                 value={orderData.address}
                 onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                margin="dense"
+                name="shippingMethod"
+                label="Shipping Method"
+                type="text"
+                placeholder="Shipping Method"
+                fullWidth
+                value={orderData.shippingMethod}
+                disabled
               />
             </Grid>
             <Grid item xs={12} sm={6}>

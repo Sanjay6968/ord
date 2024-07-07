@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { DataGrid, GridColDef, GridRowParams } from '@mui/x-data-grid';
 import { Chip } from '@mui/material';
 import OrderDetailsDialog from 'src/pages/admin/orders/OrderDetailsDialog';
@@ -49,46 +49,18 @@ const columns: GridColDef[] = [
     },
 ];
 
-export default function DataTable() {
+interface TableOrdersProps {
+    orders: Order[];
+    updateOrderStatus: (id: string, newStatus: string) => void;
+}
+
+export default function DataTable({ orders, updateOrderStatus }: TableOrdersProps) {
     const [dialogOpen, setDialogOpen] = useState<boolean>(false);
     const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
-    const [orders, setOrders] = useState<Order[]>([]);
-
-    useEffect(() => {
-        const fetchOrders = async () => {
-            try {
-                const response = await fetch('http://localhost:3000/api/private/orders');
-                const data: ApiOrder[] = await response.json();
-                const mappedOrders: Order[] = data.map((order: ApiOrder) => ({
-                    id: order.orderId,
-                    orderId: order.orderId,
-                    customer: order.name || 'N/A',
-                    phone: order.mobileNo || 'N/A',
-                    price: order.totalFinalAmount || 0,
-                    delivery_type: order.deliveryType || 'N/A',
-                    status: order.status,
-                }));
-
-                setOrders(mappedOrders);
-            } catch (error) {
-                console.error('Failed to fetch orders:', error);
-            }
-        };
-
-        fetchOrders();
-    }, []);
 
     const handleRowClick = (params: GridRowParams) => {
         setSelectedOrderId(params.row.id);
-        
         setDialogOpen(true);
-    };
-
-    const updateOrderStatus = (id: string, newStatus: string) => {
-        // Implement the logic to update the order status
-        // This function should ideally make an API call to update the status in the backend
-        // For now, it just updates the state locally
-        setOrders(orders.map(order => order.id === id ? { ...order, status: newStatus } : order));
     };
 
     return (
@@ -112,4 +84,3 @@ export default function DataTable() {
         </div>
     );
 }
-  
