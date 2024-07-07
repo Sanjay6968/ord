@@ -27,7 +27,7 @@ const navigation = (): VerticalNavItemsType => {
     {
       title: 'Orders',
       icon: FormatListBulleted,
-      path: 'admin/orders'
+      path: '/admin/orders'
     },
     {
       title: 'Inventory',
