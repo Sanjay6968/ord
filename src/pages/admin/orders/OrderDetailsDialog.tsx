@@ -311,13 +311,13 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
                         onChange={handleStatusChange}
                         label="Status"
                       >
-                        <MenuItem value="Confirmed">Confirmed</MenuItem>
-                        <MenuItem value="Printing Scheduled">Printing Scheduled</MenuItem>
-                        <MenuItem value="In Production">In Production</MenuItem>
-                        <MenuItem value="Post Processing">Post Processing</MenuItem>
-                        <MenuItem value="Dispatch">Dispatch</MenuItem>
-                        <MenuItem value="Delivered">Delivered</MenuItem>
-                        <MenuItem value="Cancelled">Cancelled</MenuItem>
+                        <MenuItem value="confirmed">Confirmed</MenuItem>
+                        <MenuItem value="printingScheduled">Printing Scheduled</MenuItem>
+                        <MenuItem value="inProduction">In Production</MenuItem>
+                        <MenuItem value="postProcessing">Post Processing</MenuItem>
+                        <MenuItem value="dispatch">Dispatch</MenuItem>
+                        <MenuItem value="delivered">Delivered</MenuItem>
+                        <MenuItem value="cancelled">Cancelled</MenuItem>
                       </Select>
                     </FormControl>
                   </CardContent>

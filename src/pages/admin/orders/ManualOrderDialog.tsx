@@ -26,22 +26,28 @@ interface ManualOrderDialogProps {
   onClose: () => void;
 }
 
+const layerThicknessOptions = [
+  { label: 'Ultra Fine - 0.12mm', value: 'ULTRAFINE' },
+  { label: 'Fine - 0.16mm', value: 'FINE' },
+  { label: 'Normal - 0.2mm', value: 'NORMAL' },
+  { label: 'Draft - 0.3mm', value: 'DRAFT' },
+];
+
 const ManualOrderDialog: React.FC<ManualOrderDialogProps> = ({ open, onClose }) => {
   const [orderData, setOrderData] = useState({
-    customer: '',
+    cname: '',
     phone: '',
-    price: '',
-    delivery_type: 'Standard',
+    totalFinalAmount: '', 
+    deliveryType: 'Standard',
     shippingMethod: 'DTDC',
-    expert_assistance: 'Not Required',
-    customer_name: '',
+    expertAssistance: 'Not Required',
     email: '',
     address: '',
     pincode: '',
     status: '',
     technology: 'FDM',
     material: 'PLA',
-    layerThickness: 'Normal - 0.2mm',
+    layerThickness: 'NORMAL',
     printer: 'STANDARD 220x200x220mm',
     infill: 10,
     colorFinish: 'White',
@@ -51,12 +57,12 @@ const ManualOrderDialog: React.FC<ManualOrderDialogProps> = ({ open, onClose }) 
   });
 
   useEffect(() => {
-    if (orderData.delivery_type === 'Standard') {
+    if (orderData.deliveryType === 'Standard') {
       setOrderData(prevState => ({ ...prevState, shippingMethod: 'DTDC' }));
-    } else if (orderData.delivery_type === 'Express') {
+    } else if (orderData.deliveryType === 'Express') {
       setOrderData(prevState => ({ ...prevState, shippingMethod: 'BlueDart Express Air' }));
     }
-  }, [orderData.delivery_type]);
+  }, [orderData.deliveryType]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -76,7 +82,7 @@ const ManualOrderDialog: React.FC<ManualOrderDialogProps> = ({ open, onClose }) 
 
   const handleDeliveryTypeChange = (event: React.MouseEvent<HTMLElement>, newDeliveryType: string) => {
     if (newDeliveryType !== null) {
-      setOrderData({ ...orderData, delivery_type: newDeliveryType });
+      setOrderData({ ...orderData, deliveryType: newDeliveryType });
     }
   };
 
@@ -128,12 +134,12 @@ const ManualOrderDialog: React.FC<ManualOrderDialogProps> = ({ open, onClose }) 
             <Grid item xs={12} sm={6}>
               <TextField
                 margin="dense"
-                name="customer"
+                name="cname"
                 label="Customer Name"
                 type="text"
                 placeholder="Enter the full name"
                 fullWidth
-                value={orderData.customer}
+                value={orderData.cname}
                 onChange={handleChange}
               />
             </Grid>
@@ -164,12 +170,12 @@ const ManualOrderDialog: React.FC<ManualOrderDialogProps> = ({ open, onClose }) 
             <Grid item xs={12} sm={6}>
               <TextField
                 margin="dense"
-                name="price"
+                name="totalFinalAmount"
                 label="Price"
                 type="number"
                 placeholder="Enter the price"
                 fullWidth
-                value={orderData.price}
+                value={orderData.totalFinalAmount}
                 onChange={handleChange}
               />
             </Grid>
@@ -249,9 +255,9 @@ const ManualOrderDialog: React.FC<ManualOrderDialogProps> = ({ open, onClose }) 
                   name="layerThickness"
                   label="Layer Thickness"
                 >
-                  {['Ultra Fine - 0.12mm', 'Fine - 0.16mm', 'Normal - 0.2mm', 'Draft - 0.3mm'].map(option => (
-                    <MenuItem key={option} value={option}>
-                      {option}
+                  {layerThicknessOptions.map(option => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
                     </MenuItem>
                   ))}
                 </Select>
@@ -305,7 +311,7 @@ const ManualOrderDialog: React.FC<ManualOrderDialogProps> = ({ open, onClose }) 
             <Grid item xs={12}>
               <Typography variant="body1">Delivery Type</Typography>
               <ToggleButtonGroup
-                value={orderData.delivery_type}
+                value={orderData.deliveryType}
                 exclusive
                 onChange={handleDeliveryTypeChange}
                 aria-label="delivery type"
