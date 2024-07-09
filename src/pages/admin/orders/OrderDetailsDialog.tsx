@@ -87,6 +87,7 @@ interface ApiOrderDetails {
   statusNotes: string[];
   createdAt: string;
   updatedAt: string;
+  isOfflineOrder: boolean;
 }
 
 interface OrderDetailsDialogProps {
@@ -126,7 +127,7 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
-        const data: { order: ApiOrderDetails, thumbnailUrl: string, modelUrl: string } = await response.json();
+        const data: { order: ApiOrderDetails, thumbnailUrl?: string, modelUrl?: string } = await response.json();
 
         const validDate = isValidDate(data.order.createdAt) ? new Date(data.order.createdAt).toISOString() : 'Invalid date';
 
@@ -134,9 +135,10 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
 
         setOrderDetails(data.order);
 
-        setThumbnailUrl(data.thumbnailUrl);
-
-        setModelUrl(data.modelUrl);
+        if (!data.order.isOfflineOrder) {
+          setThumbnailUrl(data.thumbnailUrl || null);
+          setModelUrl(data.modelUrl || null);
+        }
 
         setStatus(data.order.status);
       } catch (error) {
@@ -201,7 +203,7 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="xl">
       <DialogTitle>
-        Order #{orderId}
+        {`Order #${orderId} ${orderDetails.isOfflineOrder ? ' (Manual Order)' : ''}`}
         <Typography variant="subtitle1" color="textSecondary">
           Created on: {formatCreationTime(orderDetails.createdAt)}
         </Typography>
@@ -221,13 +223,15 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
                       <div style={{ flex: 1 }}>
                         <div style={{ display: 'flex', alignItems: 'center', marginBottom: isMobile ? '16px' : '8px' }}>
                           <Typography variant="h5" gutterBottom>{orderDetails.originalFileName}</Typography>
-                          <IconButton
+                          {!orderDetails.isOfflineOrder && (
+                            <IconButton
                             color="secondary"
                             style={{ padding: '6px', marginLeft: '8px' }}
                             onClick={handleDownload}
                           >
                             <DownloadIcon />
                           </IconButton>
+                          )}
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
                           <Typography>{orderDetails.customization?.technology}</Typography>
