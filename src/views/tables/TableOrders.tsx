@@ -17,7 +17,7 @@ interface Order {
     orderId: string;
     customer: string;
     phone: string; 
-    price: number;
+    totalFinalAmount: number;
     delivery_type: string;
     status: string;
 }
@@ -26,7 +26,7 @@ const columns: GridColDef[] = [
     { field: 'orderId', headerName: 'Order ID', flex: 1 },
     { field: 'customer', headerName: 'Customer Name', flex: 1 },
     { field: 'phone', headerName: 'Mobile No.', flex: 1 },
-    { field: 'price', headerName: 'Final Amount', flex: 1 },
+    { field: 'totalFinalAmount', headerName: 'Final Amount', flex: 1 },
     { field: 'delivery_type', headerName: 'Delivery', flex: 1 },
     {
         field: 'status',

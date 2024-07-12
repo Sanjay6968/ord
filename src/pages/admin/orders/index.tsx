@@ -33,7 +33,7 @@ const Orders = () => {
             orderId: order.orderId,
             customer: order.name || 'N/A',
             phone: order.mobileNo || 'N/A',
-            price: order.totalFinalAmount || 0,
+            totalFinalAmount: order.totalFinalAmount || 0,
             delivery_type: order.deliveryType || 'N/A',
             status: order.status,
         }));

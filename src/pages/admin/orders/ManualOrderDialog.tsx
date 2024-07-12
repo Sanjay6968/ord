@@ -33,6 +33,16 @@ const layerThicknessOptions = [
   { label: 'Draft - 0.3mm', value: 'DRAFT' },
 ];
 
+const statuses = [
+  "Confirmed",
+  "Printing Scheduled",
+  "In Production",
+  "Post Processing",
+  "Dispatch",
+  "Delivered",
+  "Cancelled"
+];
+
 const ManualOrderDialog: React.FC<ManualOrderDialogProps> = ({ open, onClose }) => {
   const [orderData, setOrderData] = useState({
     cname: '',
@@ -93,13 +103,43 @@ const ManualOrderDialog: React.FC<ManualOrderDialogProps> = ({ open, onClose }) 
   };
 
   const handleCreateOrder = async () => {
+    const { cname, phone, totalFinalAmount, deliveryType, shippingMethod, expertAssistance, email, address, pincode, status, technology, material, layerThickness, printer, infill, colorFinish, quantity, gstNumber, originalFileName } = orderData;
+    
+    const payload = {
+      customization: {
+        technology,
+        material,
+        layerThickness,
+        printer,
+        infill,
+        colorFinish,
+        originalFileName,
+        quantity,
+      },
+      deliveryInstructions: {
+        deliveryType,
+        cname,
+        address,
+        pincode,
+        expertAssistance,
+        email,
+        phone,
+        shippingMethod,
+      },
+      printPrices: {
+        totalFinalAmount,
+      },
+      status,
+      gstNumber,
+    };
+
     try {
       const response = await fetch('http://localhost:3000/api/private/order/createManualOrder', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(orderData),
+        body: JSON.stringify(payload),
       });
 
       if (!response.ok) {
@@ -113,16 +153,6 @@ const ManualOrderDialog: React.FC<ManualOrderDialogProps> = ({ open, onClose }) 
       console.error('Error creating order:', error);
     }
   };
-
-  const statuses = [
-    "Confirmed",
-    "Printing Scheduled",
-    "In Production",
-    "Post Processing",
-    "Dispatch",
-    "Delivered",
-    "Cancelled"
-  ];
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="lg">

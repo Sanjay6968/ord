@@ -225,12 +225,12 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
                           <Typography variant="h5" gutterBottom>{orderDetails.originalFileName}</Typography>
                           {!orderDetails.isOfflineOrder && (
                             <IconButton
-                            color="secondary"
-                            style={{ padding: '6px', marginLeft: '8px' }}
-                            onClick={handleDownload}
-                          >
-                            <DownloadIcon />
-                          </IconButton>
+                              color="secondary"
+                              style={{ padding: '6px', marginLeft: '8px' }}
+                              onClick={handleDownload}
+                            >
+                              <DownloadIcon />
+                            </IconButton>
                           )}
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
@@ -258,44 +258,55 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
                 <Card>
                   <CardContent>
                     <Typography variant="h6">Order Summary</Typography>
-                    <Grid container spacing={1}>
-                      <Grid item xs={6}>
-                        <Typography>Unit Production Price:</Typography>
+                    {orderDetails.isOfflineOrder ? (
+                      <Grid container spacing={1}>
+                        <Grid item xs={6}>
+                          <Typography variant="body1" fontWeight="bold">Total Final Amount:</Typography>
+                        </Grid>
+                        <Grid item xs={6}>
+                          <Typography variant="body1" align="right" fontWeight="bold">₹{orderDetails.printPrices?.totalFinalAmount || 0}</Typography>
+                        </Grid>
                       </Grid>
-                      <Grid item xs={6}>
-                        <Typography align="right">₹{orderDetails.printPrices?.unitProductionPrice || 0}</Typography>
+                    ) : (
+                      <Grid container spacing={1}>
+                        <Grid item xs={6}>
+                          <Typography>Unit Production Price:</Typography>
+                        </Grid>
+                        <Grid item xs={6}>
+                          <Typography align="right">₹{orderDetails.printPrices?.unitProductionPrice || 0}</Typography>
+                        </Grid>
+                        <Grid item xs={6}>
+                          <Typography>Unit Post Production Price:</Typography>
+                        </Grid>
+                        <Grid item xs={6}>
+                          <Typography align="right">₹{orderDetails.printPrices?.unitPostProductionPrice || 0}</Typography>
+                        </Grid>
+                        <Grid item xs={6}>
+                          <Typography>Subtotal:</Typography>
+                        </Grid>
+                        <Grid item xs={6}>
+                          <Typography align="right">₹{orderDetails.printPrices?.subtotal || 0}</Typography>
+                        </Grid>
+                        <Grid item xs={6}>
+                          <Typography>Tax Amount:</Typography>
+                        </Grid>
+                        <Grid item xs={6}>
+                          <Typography align="right">₹{orderDetails.printPrices?.taxAmount || 0}</Typography>
+                        </Grid>
+                        <Grid item xs={6}>
+                          <Typography>Shipping Price:</Typography>
+                        </Grid>
+                        <Grid item xs={6}>
+                          <Typography align="right">₹{orderDetails.printPrices?.shippingPrice || 0}</Typography>
+                        </Grid>
+                        <Grid item xs={6}>
+                          <Typography variant="body1" fontWeight="bold">Total Final Amount:</Typography>
+                        </Grid>
+                        <Grid item xs={6}>
+                          <Typography variant="body1" align="right" fontWeight="bold">₹{orderDetails.printPrices?.totalFinalAmount || 0}</Typography>
+                        </Grid>
                       </Grid>
-                      <Grid item xs={6}>
-                        <Typography>Unit Post Production Price:</Typography>
-                      </Grid>
-                      <Grid item xs={6}>
-                        <Typography align="right">₹{orderDetails.printPrices?.unitPostProductionPrice || 0}</Typography>
-                      </Grid>
-                      <Grid item xs={6}>
-                        <Typography>Subtotal:</Typography>
-                      </Grid>
-                      <Grid item xs={6}>
-                        <Typography align="right">₹{orderDetails.printPrices?.subtotal || 0}</Typography>
-                      </Grid>
-                      <Grid item xs={6}>
-                        <Typography>Tax Amount:</Typography>
-                      </Grid>
-                      <Grid item xs={6}>
-                        <Typography align="right">₹{orderDetails.printPrices?.taxAmount || 0}</Typography>
-                      </Grid>
-                      <Grid item xs={6}>
-                        <Typography>Shipping Price:</Typography>
-                      </Grid>
-                      <Grid item xs={6}>
-                        <Typography align="right">₹{orderDetails.printPrices?.shippingPrice || 0}</Typography>
-                      </Grid>
-                      <Grid item xs={6}>
-                        <Typography variant="body1" fontWeight="bold">Total Final Amount:</Typography>
-                      </Grid>
-                      <Grid item xs={6}>
-                        <Typography variant="body1" align="right" fontWeight="bold">₹{orderDetails.printPrices?.totalFinalAmount || 0}</Typography>
-                      </Grid>
-                    </Grid>
+                    )}
                   </CardContent>
                 </Card>
               </Grid>
