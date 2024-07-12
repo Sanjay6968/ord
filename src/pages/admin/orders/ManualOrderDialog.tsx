@@ -39,7 +39,7 @@ const statuses = [
   "In Production",
   "Post Processing",
   "Dispatch",
-  "Delivered",
+  "Shipped",
   "Cancelled"
 ];
 

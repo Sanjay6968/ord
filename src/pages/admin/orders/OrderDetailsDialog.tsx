@@ -327,7 +327,7 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
                         <MenuItem value="inProduction">In Production</MenuItem>
                         <MenuItem value="postProcessing">Post Processing</MenuItem>
                         <MenuItem value="dispatch">Dispatch</MenuItem>
-                        <MenuItem value="delivered">Delivered</MenuItem>
+                        <MenuItem value="shipped">Shipped</MenuItem>
                         <MenuItem value="cancelled">Cancelled</MenuItem>
                       </Select>
                     </FormControl>

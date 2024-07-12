@@ -39,7 +39,7 @@ const columns: GridColDef[] = [
                 inProduction: 'info',
                 postProcessing: 'info',
                 dispatch: 'info',
-                delivered: 'success',
+                shipped: 'success',
                 cancelled: 'error',
             };
             const color = statusColors[params.value.toLowerCase() as keyof typeof statusColors] || 'default';
