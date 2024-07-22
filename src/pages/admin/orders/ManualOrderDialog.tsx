@@ -1,22 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  TextField,
-  MenuItem,
-  Select,
-  FormControl,
-  InputLabel,
-  Box,
-  SelectChangeEvent,
-  Typography,
-  Grid,
-  ToggleButton,
-  ToggleButtonGroup
-} from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, MenuItem, Select, FormControl, InputLabel, Box, SelectChangeEvent, Typography, Grid, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { TechnologyDropdown } from 'src/layouts/components/TechnologyDropdown';
 import { MaterialDropdown, getMaterialOptions } from 'src/layouts/components/MaterialDropdown';
 import { ColorFinishDropdown, colorOptions } from 'src/layouts/components/ColorFinishDropdown';

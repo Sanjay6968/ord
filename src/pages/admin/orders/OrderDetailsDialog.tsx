@@ -159,17 +159,89 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
     return !isNaN(date.getTime());
   };
 
+  const sendUpdateOrderStatusRequest = async (orderId: string, newStatus: string) => {
+    let endpoint = '';
+    switch (newStatus) {
+      case 'confirmed':
+        endpoint = 'setStatusConfirmed';
+        break;
+      case 'printingScheduled':
+        endpoint = 'setStatusPrintingScheduled';
+        break;
+      case 'inProduction':
+        endpoint = 'setStatusInProduction';
+        break;
+      case 'postProcessing':
+        endpoint = 'setStatusPostProcessing';
+        break;
+      case 'dispatch':
+        endpoint = 'setStatusDispatch';
+        break;
+      case 'shipped':
+        endpoint = 'setStatusShipped';
+        break;
+      case 'cancelled':
+        endpoint = 'setStatusCancelled';
+        break;
+      default:
+        throw new Error(`Unknown status: ${newStatus}`);
+    }
+
+    try {
+      const response = await fetch(`http://localhost:3000/api/private/order/${endpoint}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ orderId }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const updatedOrder = await response.json();
+      setOrderDetails(updatedOrder);
+      setStatus(updatedOrder.status);
+    } catch (error) {
+      console.error(`Failed to update order status to ${newStatus}:`, error);
+    }
+  };
+
   const handleStatusChange = (event: SelectChangeEvent) => {
     const newStatus = event.target.value;
 
     setStatus(newStatus);
 
-    updateOrderStatus(orderId, newStatus);
+    sendUpdateOrderStatusRequest(orderId, newStatus);
   };
 
   const handleDownload = () => {
     if (modelUrl) {
       window.location.href = modelUrl;
+    }
+  };
+
+  const handleAddNote = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/api/private/order/addNote', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ orderId, note }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      console.log('Note added successfully:', data);
+
+      setNote('');
+    } catch (error) {
+      console.error('Failed to add note:', error);
     }
   };
 
@@ -356,6 +428,7 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
                     <Button
                       variant="contained"
                       style={{ backgroundColor: '#FED700', color: "primary", marginTop: '8px' }}
+                      onClick={handleAddNote}
                     >
                       Add Notes
                     </Button>
