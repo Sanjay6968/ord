@@ -108,6 +108,8 @@ const DispatchOrderDetailsDialog: React.FC<DispatchDetailsDialogProps> = ({
   const [modelUrl, setModelUrl] = useState<string | null>(null);
   const [status, setStatus] = useState<string>('');
   const [note, setNote] = useState<string>('');
+  const [courierName, setCourierName] = useState<string>('');
+  const [trackingId, setTrackingId] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -169,6 +171,30 @@ const DispatchOrderDetailsDialog: React.FC<DispatchDetailsDialogProps> = ({
   const handleDownload = () => {
     if (modelUrl) {
       window.location.href = modelUrl;
+    }
+  };
+
+  const handleUpdateTrackingDetails = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/api/private/orders/updateTrackingDetails', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ orderId, courierName, trackingId }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const updatedOrder = await response.json();
+      setOrderDetails(updatedOrder);
+      setCourierName('');
+      setTrackingId('');
+      console.log('Tracking details updated successfully:', updatedOrder);
+    } catch (error) {
+      console.error('Failed to update tracking details:', error);
     }
   };
 
@@ -333,6 +359,37 @@ const DispatchOrderDetailsDialog: React.FC<DispatchDetailsDialogProps> = ({
 
           <Grid item xs={12} md={4}>
             <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <Card>
+                  <CardContent>
+                    <Typography variant="h6">Tracking Details</Typography>
+                    <TextField
+                      label="Courier Name"
+                      fullWidth
+                      value={courierName}
+                      onChange={(e) => setCourierName(e.target.value)}
+                      variant="outlined"
+                      margin="normal"
+                    />
+                    <TextField
+                      label="Tracking ID"
+                      fullWidth
+                      value={trackingId}
+                      onChange={(e) => setTrackingId(e.target.value)}
+                      variant="outlined"
+                      margin="normal"
+                    />
+                    <Button
+                      variant="contained"
+                      style={{ backgroundColor: '#FED700', color: "primary", marginTop: '8px' }}
+                      onClick={handleUpdateTrackingDetails}
+                    >
+                      Update Tracking Details
+                    </Button>
+                  </CardContent>
+                </Card>
+              </Grid>
+
               <Grid item xs={12}>
                 <Card>
                   <CardContent>
