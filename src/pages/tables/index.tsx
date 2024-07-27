@@ -45,8 +45,8 @@ const MUITable = () => {
       <Grid item xs={12}>
         <Card>
           <CardHeader title='Sticky Header' titleTypographyProps={{ variant: 'h6' }} />
-
-          <TableOrders />
+      
+          <TableOrders orders={[]} updateOrderStatus={() => {}} />
         </Card>
       </Grid>
 
