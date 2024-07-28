@@ -72,6 +72,21 @@ code[class*='language-'] {
   color: #000;
 }
 
+.cl-formFieldInput {
+  background-color: #fff;
+  color: #000;
+}
+
+.cl-identityPreviewText {
+  background-color: #fff;
+  color: #000;
+}
+
+.cl-identityPreview {
+  background-color: #fff;
+  color: #000;
+}
+
 .cl-headerSubtitle {
   display: none;
   color: #000;
