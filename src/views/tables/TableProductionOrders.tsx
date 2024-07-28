@@ -57,7 +57,7 @@ export default function DataTable() {
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                const response = await fetch('${process.env.NEXT_PUBLIC_MEKUVA_BACKEND_API_BASE_URL}/api/private/orders');
+                const response = await fetch(`${process.env.NEXT_PUBLIC_MEKUVA_BACKEND_API_BASE_URL}/api/private/orders`);
                 const data: ApiOrder[] = await response.json();
                 const mappedOrders: Order[] = data.map((order: ApiOrder) => ({
                     id: order.orderId,

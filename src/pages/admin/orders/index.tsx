@@ -26,23 +26,24 @@ const Orders = () => {
 
   const fetchOrders = async () => {
     try {
-        const response = await fetch('${process.env.NEXT_PUBLIC_MEKUVA_BACKEND_API_BASE_URL}/api/private/orders');
-        const data = await response.json();
-        const mappedOrders = data.map((order: any) => ({
-            id: order.orderId,
-            orderId: order.orderId,
-            customer: order.name || 'N/A',
-            phone: order.mobileNo || 'N/A',
-            totalFinalAmount: order.totalFinalAmount || 0,
-            delivery_type: order.deliveryType || 'N/A',
-            status: order.status,
-        }));
-        console.log('Fetched orders:', mappedOrders);
-        setOrders(mappedOrders);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_MEKUVA_BACKEND_API_BASE_URL}/api/private/orders`);
+      const data = await response.json();
+      const mappedOrders = data.map((order: { orderId: any; name: any; mobileNo: any; totalFinalAmount: any; deliveryType: any; status: any; }) => ({
+        id: order.orderId,
+        orderId: order.orderId,
+        customer: order.name || 'N/A',
+        phone: order.mobileNo || 'N/A',
+        totalFinalAmount: order.totalFinalAmount || 0,
+        delivery_type: order.deliveryType || 'N/A',
+        status: order.status,
+      }));
+      console.log('Fetched orders:', mappedOrders);
+      setOrders(mappedOrders);
     } catch (error) {
-        console.error('Failed to fetch orders:', error);
+      console.error('Failed to fetch orders:', error);
     }
   };
+  
 
   useEffect(() => {
     fetchOrders();
