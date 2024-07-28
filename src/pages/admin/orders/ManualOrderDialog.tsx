@@ -117,7 +117,7 @@ const ManualOrderDialog: React.FC<ManualOrderDialogProps> = ({ open, onClose }) 
     };
 
     try {
-      const response = await fetch('http://localhost:3000/api/private/order/createManualOrder', {
+      const response = await fetch('${process.env.MEKUVA_BACKEND_API_BASE_URL}/api/private/order/createManualOrder', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

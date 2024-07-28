@@ -119,7 +119,7 @@ const DispatchOrderDetailsDialog: React.FC<DispatchDetailsDialogProps> = ({
       setLoading(true);
 
       try {
-        const response = await fetch(`http://localhost:3000/api/private/orders/${orderId}`, {
+        const response = await fetch(`${process.env.MEKUVA_BACKEND_API_BASE_URL}/api/private/orders/${orderId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -176,7 +176,7 @@ const DispatchOrderDetailsDialog: React.FC<DispatchDetailsDialogProps> = ({
 
   const handleUpdateTrackingDetails = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/private/orders/updateTrackingDetails', {
+      const response = await fetch('${process.env.MEKUVA_BACKEND_API_BASE_URL}/api/private/orders/updateTrackingDetails', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
