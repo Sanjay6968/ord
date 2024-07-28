@@ -117,7 +117,7 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
       setLoading(true);
 
       try {
-        const response = await fetch(`${process.env.MEKUVA_BACKEND_API_BASE_URL}/api/private/orders/${orderId}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_MEKUVA_BACKEND_API_BASE_URL}/api/private/orders/${orderId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -188,7 +188,7 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
     }
 
     try {
-      const response = await fetch(`${process.env.MEKUVA_BACKEND_API_BASE_URL}/api/private/order/${endpoint}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_MEKUVA_BACKEND_API_BASE_URL}/api/private/order/${endpoint}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -224,7 +224,7 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
 
   const handleAddNote = async () => {
     try {
-      const response = await fetch('${process.env.MEKUVA_BACKEND_API_BASE_URL}/api/private/order/addNote', {
+      const response = await fetch('${process.env.NEXT_PUBLIC_MEKUVA_BACKEND_API_BASE_URL}/api/private/order/addNote', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

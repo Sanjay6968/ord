@@ -38,7 +38,7 @@ const DataTable = ({ orders, updateOrderStatus }: TableOrdersProps) => {
     const handleShowNotesClick = async (orderId: string, event: React.MouseEvent) => {
         event.stopPropagation();
         try {
-            const response = await fetch(`${process.env.MEKUVA_BACKEND_API_BASE_URL}/api/private/orders/status-notes/${orderId}`);
+            const response = await fetch(`${process.env.NEXT_PUBLIC_MEKUVA_BACKEND_API_BASE_URL}/api/private/orders/status-notes/${orderId}`);
             const data = await response.json();
             setSelectedOrderNotes(data.statusNotes);
             setNotesDialogOpen(true);
