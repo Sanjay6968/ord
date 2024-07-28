@@ -116,7 +116,7 @@ const ProductionOrderDetailsDialog: React.FC<ProductionOrderDetailsDialogProps> 
       setLoading(true);
 
       try {
-        const response = await fetch(`${process.env.MEKUVA_BACKEND_API_BASE_URL}/api/private/orders/${orderId}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_MEKUVA_BACKEND_API_BASE_URL}/api/private/orders/${orderId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

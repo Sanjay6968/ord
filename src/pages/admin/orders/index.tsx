@@ -26,7 +26,7 @@ const Orders = () => {
 
   const fetchOrders = async () => {
     try {
-        const response = await fetch('${process.env.MEKUVA_BACKEND_API_BASE_URL}/api/private/orders');
+        const response = await fetch('${process.env.NEXT_PUBLIC_MEKUVA_BACKEND_API_BASE_URL}/api/private/orders');
         const data = await response.json();
         const mappedOrders = data.map((order: any) => ({
             id: order.orderId,
