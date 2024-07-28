@@ -26,3 +26,9 @@ export type CardStatsVerticalProps = {
   trendNumber: string
   trend?: 'positive' | 'negative'
 }
+
+export interface OptionType {
+  label: string;
+  value: string;
+  color?: string;
+}

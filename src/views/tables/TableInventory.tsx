@@ -23,7 +23,11 @@ const columns: GridColDef[] = [
     headerName: 'Price per Unit', 
     flex: 1,
     type: 'number',
-    valueFormatter: ({ value }: { value: number }) => `₹${value.toFixed(2)}`,
+    valueFormatter: ({ value }: { value?: number }) => {
+      if (typeof value === 'number') {
+        return `₹${value.toFixed(2)}`;
+      }
+    }
   },
   { field: 'supplier', headerName: 'Supplier/Manufacturer', flex: 1 },
 ];
@@ -39,8 +43,10 @@ const rows = [
 export default function TableInventory() {
     const [dialogOpen, setDialogOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
+    
     const handleRowClick = (params: GridRowParams) => {
         setSelectedItem(params.row);
+        
         setDialogOpen(true);
     };
 

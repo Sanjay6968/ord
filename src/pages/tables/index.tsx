@@ -18,7 +18,7 @@ const MUITable = () => {
     <Grid container spacing={6}>
       <Grid item xs={12}>
         <Typography variant='h5'>
-          <Link href='https://mui.com/components/tables/' target='_blank'>
+          <Link>
             MUI Tables
           </Link>
         </Typography>
@@ -45,8 +45,8 @@ const MUITable = () => {
       <Grid item xs={12}>
         <Card>
           <CardHeader title='Sticky Header' titleTypographyProps={{ variant: 'h6' }} />
-
-          <TableOrders />
+      
+          <TableOrders orders={[]} updateOrderStatus={() => {}} />
         </Card>
       </Grid>
 

@@ -4,7 +4,45 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
-import { CircularProgress, Grid, Typography, TextField, Card, CardContent, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, useMediaQuery, useTheme } from '@mui/material';
+import AccountOutlineIcon from 'mdi-material-ui/AccountOutline';
+import EmailOutlineIcon from 'mdi-material-ui/EmailOutline';
+import PhoneOutlineIcon from 'mdi-material-ui/PhoneOutline';
+import MapMarkerOutlineIcon from 'mdi-material-ui/MapMarkerOutline';
+import TruckIcon from 'mdi-material-ui/Truck';
+import DownloadIcon from 'mdi-material-ui/Download';
+import IconButton from '@mui/material/IconButton';
+import { CircularProgress, Grid, Typography, TextField, Card, CardContent, FormControl, useMediaQuery, useTheme, Switch, FormControlLabel } from '@mui/material';
+import ColorBox from 'src/@core/layouts/components/shared-components/ColorBox';
+
+const colorOptions = [
+  { label: 'White', value: 'White', color: '#FFFFFF' },
+  { label: 'Black', value: 'Black', color: '#000000' },
+  { label: 'Grey', value: 'Grey', color: '#808080' },
+  { label: 'Dark Grey', value: 'Dark Grey', color: '#A9A9A9' },
+  { label: 'Silver', value: 'Silver', color: '#C0C0C0' },
+  { label: 'Gold', value: 'Gold', color: '#FFD700' },
+  { label: 'Skin', value: 'Skin', color: '#FFDAB9' },
+  { label: 'Natural', value: 'Natural', color: '#F5DEB3' },
+  { label: 'Brown', value: 'Brown', color: '#A52A2A' },
+  { label: 'Pink', value: 'Pink', color: '#FFC0CB' },
+  { label: 'Red', value: 'Red', color: '#FF0000' },
+  { label: 'Orange', value: 'Orange', color: '#FFA500' },
+  { label: 'Yellow', value: 'Yellow', color: '#FFFF00' },
+  { label: 'Lime Green', value: 'Lime Green', color: '#32CD32' },
+  { label: 'Green', value: 'Green', color: '#008000' },
+  { label: 'Sky Blue', value: 'Sky Blue', color: '#87CEEB' },
+  { label: 'Blue', value: 'Blue', color: '#0000FF' },
+  { label: 'Purple', value: 'Purple', color: '#800080' },
+  { label: 'Glow in Dark', value: 'Glow in Dark', color: '#FFFF00' },
+  { label: 'Glitter Green', value: 'Glitter Green', color: '#008000' },
+  { label: 'Rainbow', value: 'Rainbow', color: 'linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet)' },
+  { label: 'Carbon Fiber', value: 'Carbon Fiber', color: '#333333' },
+];
+
+const getColorByLabel = (label: string) => {
+  const colorOption = colorOptions.find(option => option.label === label);
+  return colorOption ? colorOption.color : '#FFFFFF';
+};
 
 interface ApiOrderDetails {
   customization: {
@@ -58,7 +96,7 @@ interface OrderDetailsDialogProps {
   updateOrderStatus: (orderId: string, newStatus: string) => void;
 }
 
-const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
+const SalesOrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
   open,
   onClose,
   orderId,
@@ -66,6 +104,7 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
 }) => {
   const [orderDetails, setOrderDetails] = useState<ApiOrderDetails | null>(null);
   const [thumbnailUrl, setThumbnailUrl] = useState<string | null>(null);
+  const [modelUrl, setModelUrl] = useState<string | null>(null);
   const [status, setStatus] = useState<string>('');
   const [note, setNote] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -75,21 +114,30 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
   useEffect(() => {
     const fetchOrderDetails = async () => {
       setLoading(true);
+
       try {
-        const response = await fetch(`http://localhost:3000/api/private/orders/${orderId}`, {
+        const response = await fetch(`${process.env.MEKUVA_BACKEND_API_BASE_URL}/api/private/orders/${orderId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
           },
         });
+
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
-        const data: { order: ApiOrderDetails, thumbnailUrl: string } = await response.json();
+        const data: { order: ApiOrderDetails, thumbnailUrl: string, modelUrl: string } = await response.json();
+
         const validDate = isValidDate(data.order.createdAt) ? new Date(data.order.createdAt).toISOString() : 'Invalid date';
+
         data.order.createdAt = validDate;
+
         setOrderDetails(data.order);
+
         setThumbnailUrl(data.thumbnailUrl);
+
+        setModelUrl(data.modelUrl);
+
         setStatus(data.order.status);
       } catch (error) {
         console.error('Failed to fetch order details:', error);
@@ -105,13 +153,20 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
 
   const isValidDate = (dateString: string) => {
     const date = new Date(dateString);
+
     return !isNaN(date.getTime());
   };
 
-  const handleStatusChange = (event: SelectChangeEvent) => {
-    const newStatus = event.target.value;
+  const handleStatusToggle = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newStatus = event.target.checked ? 'Printing Scheduled' : 'Confirmed';
     setStatus(newStatus);
     updateOrderStatus(orderId, newStatus);
+  };
+
+  const handleDownload = () => {
+    if (modelUrl) {
+      window.location.href = modelUrl;
+    }
   };
 
   if (loading || !orderDetails) {
@@ -126,9 +181,11 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
 
   const formatCreationTime = (createdAt: string) => {
     const date = new Date(createdAt);
+
     if (isNaN(date.getTime())) {
       return 'Invalid date';
     }
+
     return new Intl.DateTimeFormat('en-US', {
       month: 'long',
       day: 'numeric',
@@ -155,21 +212,37 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
                 <Card>
                   <CardContent>
                     <Typography variant="h6">Order Item</Typography>
-                    <div style={{ display: 'flex', alignItems: 'flex-start', flexDirection: isMobile ? 'column' : 'row', justifyContent: isMobile ? 'flex-start' : 'space-between' }}>
-                      <div>
-                        <Typography variant="h5" gutterBottom>{orderDetails.originalFileName}</Typography>
-                        {isMobile && thumbnailUrl && (
-                          <img src={thumbnailUrl} alt="Thumbnail" style={{ maxWidth: '150px', height: 'auto', marginTop: '8px', marginBottom: '8px' }} />
-                        )}
-                        <Typography>Technology: {orderDetails.customization?.technology || 'N/A'}</Typography>
-                        <Typography>Material: {orderDetails.customization?.material || 'N/A'}</Typography>
-                        <Typography>Color Finish: {orderDetails.customization?.colorFinish || 'N/A'}</Typography>
-                        <Typography>Dimensions: {orderDetails.dimensions?.length || 0} mm x {orderDetails.dimensions?.breadth || 0} mm x {orderDetails.dimensions?.height || 0} mm</Typography>
-                        <Typography>Volume: {orderDetails.dimensions?.volume || 0} mm³</Typography>
-                      </div>
-                      {!isMobile && thumbnailUrl && (
-                        <img src={thumbnailUrl} alt="Thumbnail" style={{ maxWidth: '150px', height: 'auto', marginLeft: '16px' }} />
+                    <div style={{ display: 'flex', alignItems: 'flex-start', flexDirection: isMobile ? 'column' : 'row' }}>
+                      {thumbnailUrl && (
+                        <img src={thumbnailUrl} alt="Thumbnail" style={{ maxWidth: '150px', height: 'auto', marginRight: isMobile ? '0' : '16px', marginBottom: isMobile ? '16px' : '0', border: '1px solid rgba(0, 0, 0, 0.1)' }} />
                       )}
+                      <div style={{ flex: 1 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', marginBottom: isMobile ? '16px' : '8px' }}>
+                          <Typography variant="h5" gutterBottom>{orderDetails.originalFileName}</Typography>
+                          <IconButton
+                            color="secondary"
+                            style={{ padding: '6px', marginLeft: '8px' }}
+                            onClick={handleDownload}
+                          >
+                            <DownloadIcon />
+                          </IconButton>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
+                          <Typography>{orderDetails.customization?.technology}</Typography>
+                          <div style={{ margin: '0 8px', width: '1px', backgroundColor: 'rgba(0, 0, 0, 0.2)', height: '16px' }}></div>
+                          <Typography>{orderDetails.customization?.material}</Typography>
+                          <div style={{ margin: '0 8px', width: '1px', backgroundColor: 'rgba(0, 0, 0, 0.2)', height: '16px' }}></div>
+                          <ColorBox label={orderDetails.customization?.colorFinish || 'N/A'} color={getColorByLabel(orderDetails.customization?.colorFinish)} />
+                        </div>
+                        <div style={{ marginTop: '8px' }}>
+                          <Typography variant="body1" style={{ fontWeight: 'bold' }}>Dimensions:</Typography>
+                          <Typography>{orderDetails.dimensions?.length || 0} mm x {orderDetails.dimensions?.breadth || 0} mm x {orderDetails.dimensions?.height || 0} mm</Typography>
+                        </div>
+                        <div style={{ marginTop: '8px' }}>
+                          <Typography variant="body1" style={{ fontWeight: 'bold' }}>Volume:</Typography>
+                          <Typography>{orderDetails.dimensions?.volume || 0} mm³</Typography>
+                        </div>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
@@ -220,23 +293,21 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
                   </CardContent>
                 </Card>
               </Grid>
-              
+
               <Grid item xs={12}>
                 <Card>
                   <CardContent>
                     <FormControl fullWidth>
-                      <InputLabel id="status-label">Status</InputLabel>
-                      <Select
-                        labelId="status-label"
-                        value={status}
-                        onChange={handleStatusChange}
-                        label="Status"
-                      >
-                        <MenuItem value="pending">Pending</MenuItem>
-                        <MenuItem value="completed">Completed</MenuItem>
-                        <MenuItem value="cancelled">Cancelled</MenuItem>
-                        <MenuItem value="onHold">On Hold</MenuItem>
-                      </Select>
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            checked={status === 'Printing Scheduled'}
+                            onChange={handleStatusToggle}
+                            color="primary"
+                          />
+                        }
+                        label="Printing Scheduled"
+                      />
                     </FormControl>
                   </CardContent>
                 </Card>
@@ -260,6 +331,12 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
                       variant="outlined"
                       margin="normal"
                     />
+                    <Button
+                      variant="contained"
+                      style={{ backgroundColor: '#FED700', color: "primary", marginTop: '8px' }}
+                    >
+                      Add Notes
+                    </Button>
                   </CardContent>
                 </Card>
               </Grid>
@@ -268,9 +345,18 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
                 <Card>
                   <CardContent>
                     <Typography variant="h6">Customers</Typography>
-                    <Typography>Name: {orderDetails.deliveryInstructions?.cname || 'N/A'}</Typography>
-                    <Typography>Email: {orderDetails.deliveryInstructions?.email || 'N/A'}</Typography>
-                    <Typography>Phone: {orderDetails.deliveryInstructions?.phone || 'N/A'}</Typography>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <AccountOutlineIcon style={{ marginRight: '8px' }} />
+                      <Typography>{orderDetails.deliveryInstructions?.cname || 'N/A'}</Typography>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <EmailOutlineIcon style={{ marginRight: '8px' }} />
+                      <Typography>{orderDetails.deliveryInstructions?.email || 'N/A'}</Typography>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <PhoneOutlineIcon style={{ marginRight: '8px' }} />
+                      <Typography>{orderDetails.deliveryInstructions?.phone || 'N/A'}</Typography>
+                    </div>
                   </CardContent>
                 </Card>
               </Grid>
@@ -279,8 +365,14 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
                 <Card>
                   <CardContent>
                     <Typography variant="h6">Contact Information</Typography>
-                    <Typography>Email: {orderDetails.deliveryInstructions?.email || 'N/A'}</Typography>
-                    <Typography>Phone: {orderDetails.deliveryInstructions?.phone || 'N/A'}</Typography>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <EmailOutlineIcon style={{ marginRight: '8px' }} />
+                      <Typography>{orderDetails.deliveryInstructions?.email || 'N/A'}</Typography>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <PhoneOutlineIcon style={{ marginRight: '8px' }} />
+                      <Typography>{orderDetails.deliveryInstructions?.phone || 'N/A'}</Typography>
+                    </div>
                   </CardContent>
                 </Card>
               </Grid>
@@ -289,9 +381,18 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
                 <Card>
                   <CardContent>
                     <Typography variant="h6">Shipping Address</Typography>
-                    <Typography>Address: {orderDetails.deliveryInstructions?.address || 'N/A'}</Typography>
-                    <Typography>Pincode: {orderDetails.deliveryInstructions?.pincode || 'N/A'}</Typography>
-                    <Typography>Shipping Method: {orderDetails.deliveryInstructions?.shippingMethod || 'N/A'}</Typography>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <MapMarkerOutlineIcon style={{ marginRight: '8px' }} />
+                      <Typography>{orderDetails.deliveryInstructions?.address || 'N/A'}</Typography>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <Typography style={{ marginRight: '8px' }}>Pincode:</Typography>
+                      <Typography>{orderDetails.deliveryInstructions?.pincode || 'N/A'}</Typography>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <TruckIcon style={{ marginRight: '8px' }} />
+                      <Typography>Shipping Method: {orderDetails.deliveryInstructions?.shippingMethod || 'N/A'}</Typography>
+                    </div>
                   </CardContent>
                 </Card>
               </Grid>
@@ -306,4 +407,4 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
   );
 };
 
-export default OrderDetailsDialog;
+export default SalesOrderDetailsDialog;

@@ -6,15 +6,15 @@ import Typography from '@mui/material/Typography'
 import CardHeader from '@mui/material/CardHeader'
 
 // ** Demo Components Imports
-import TableOrders from 'src/views/tables/TableOrders'
+import TableDispatchOrders from 'src/views/tables/TableDispatchOrders'
 
 const Orders = () => {
   return (
     <Grid container spacing={6}>
       <Grid item xs={12}>
         <Typography variant='h5'>
-          <Link href='https://mui.com/components/tables/' target='_blank'>
-            Orders
+          <Link>
+            Dispatch Orders
           </Link>
         </Typography>
 
@@ -24,8 +24,7 @@ const Orders = () => {
       <Grid item xs={12}>
         <Card>
           <CardHeader title='Latest Orders' titleTypographyProps={{ variant: 'h6' }} />
-
-          <TableOrders />
+          <TableDispatchOrders />
         </Card>
       </Grid>
     </Grid>

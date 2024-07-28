@@ -6,30 +6,29 @@ import Typography from '@mui/material/Typography'
 import CardHeader from '@mui/material/CardHeader'
 
 // ** Demo Components Imports
-import TableInventory from 'src/views/tables/TableInventory'
+import TableProductionOrders from 'src/views/tables/TableProductionOrders'
 
-const Inventory = () => {
+const Orders = () => {
   return (
     <Grid container spacing={6}>
       <Grid item xs={12}>
         <Typography variant='h5'>
           <Link>
-            Inventory
+            Production Orders
           </Link>
         </Typography>
 
-        <Typography variant='body2'>Inventory can be managed here</Typography>
+        <Typography variant='body2'>You can find all orders here</Typography>
       </Grid>
 
       <Grid item xs={12}>
         <Card>
-          <CardHeader title='Inventory' titleTypographyProps={{ variant: 'h6' }} />
-
-          <TableInventory />
+          <CardHeader title='Latest Orders' titleTypographyProps={{ variant: 'h6' }} />
+          <TableProductionOrders />
         </Card>
       </Grid>
     </Grid>
   )
 }
 
-export default Inventory
+export default Orders

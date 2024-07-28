@@ -1,106 +1,70 @@
-// ** Icon imports
-// import Login from 'mdi-material-ui/Login'
 import HomeOutline from 'mdi-material-ui/HomeOutline'
-
-// import AccountCogOutline from 'mdi-material-ui/AccountCogOutline'
-// import AccountPlusOutline from 'mdi-material-ui/AccountPlusOutline'
-// import AlertCircleOutline from 'mdi-material-ui/AlertCircleOutline'
 import FormatListBulleted from 'mdi-material-ui/FormatListBulleted'
 import PackageVariant from 'mdi-material-ui/PackageVariant'
 import Printer3dNozzle from 'mdi-material-ui/Printer3dNozzle'
 import AccountMultiple from 'mdi-material-ui/AccountMultiple'
 import CurrencyRupee from 'mdi-material-ui/CurrencyRupee'
+import { useAuth } from '@clerk/nextjs'
 
-// ** Type import
 import { VerticalNavItemsType } from 'src/@core/layouts/types'
 
 const navigation = (): VerticalNavItemsType => {
-  return [
-    {
-      title: 'Dashboard',
-      icon: HomeOutline,
-      path: '/'
-    },
-    {
-      sectionTitle: 'Navigation Menu'
-    },
-    {
-      title: 'Orders',
-      icon: FormatListBulleted,
-      path: '/orders'
-    },
-    {
-      title: 'Inventory',
-      path: '/inventory',
-      icon: PackageVariant
-    },
-    {
-      title: 'Print Queue',
-      icon: Printer3dNozzle,
-      path: '/queue'
-    },
-    {
-      title: 'Customers',
-      icon: AccountMultiple,
-      path: '/customers'
-    },
-    {
-      icon: CurrencyRupee,
-      title: 'Financials',
-      path: '/financials'
-    },
+  const { isLoaded, userId } = useAuth();  // Get userId from useAuth
 
-    // {
-    //   sectionTitle: 'Pages'
-    // },
-    // {
-    //   title: 'Login',
-    //   icon: Login,
-    //   path: '/pages/login',
-    //   openInNewTab: true
-    // },
-    // {
-    //   title: 'Register',
-    //   icon: AccountPlusOutline,
-    //   path: '/pages/register',
-    //   openInNewTab: true
-    // },
-    // {
-    //   title: 'Error',
-    //   icon: AlertCircleOutline,
-    //   path: '/pages/error',
-    //   openInNewTab: true
-    // }
-    
-    // {
-    //   sectionTitle: 'User Interface'
-    // },
-    // {
-    //   title: 'Typography',
-    //   icon: FormatLetterCase,
-    //   path: '/typography'
-    // },
-    // {
-    //   title: 'Icons',
-    //   path: '/icons',
-    //   icon: GoogleCirclesExtended
-    // },
-    // {
-    //   title: 'Cards',
-    //   icon: CreditCardOutline,
-    //   path: '/cards'
-    // },
-    // {
-    //   title: 'Tables',
-    //   icon: Table,
-    //   path: '/tables'
-    // },
-    // {
-    //   icon: CubeOutline,
-    //   title: 'Form Layouts',
-    //   path: '/form-layouts'
-    // }
-  ]
+  if (!isLoaded) {
+    return [];
+  }
+
+  const userPaths: { [key: string]: string } = {
+    user_2jgefoBMl5FxEaM3XIvdf2QOd6t: '/admin/orders',
+    user_2h30mxeNsmKAObdfguTUZZoaj7B: '/sales/orders',
+    user_2jgen6hu0iAWBEGuDXlJPuSMniR: '/production/orders',
+    user_2jgeuZp4FUyEIn1OcRHN4qXamxe: '/dispatch/orders',
+    user_2jgnmC3TJOIoQA52LNJMjx2XgZB: '/post-production/orders',
+  };
+
+  if (userId && userPaths.hasOwnProperty(userId)) {
+    let ordersPath = userPaths[userId];
+
+    return [
+      {
+        title: 'Dashboard',
+        icon: HomeOutline,
+        path: '/'
+      },
+      {
+        sectionTitle: 'Navigation Menu'
+      },
+      {
+        title: 'Orders',
+        icon: FormatListBulleted,
+        path: ordersPath
+      },
+      // {
+      //   title: 'Inventory',
+      //   path: '/inventory',
+      //   icon: PackageVariant
+      // },
+      // {
+      //   title: 'Print Queue',
+      //   icon: Printer3dNozzle,
+      //   path: '/queue'
+      // },
+      // {
+      //   title: 'Customers',
+      //   icon: AccountMultiple,
+      //   path: '/customers'
+      // },
+      // {
+      //   icon: CurrencyRupee,
+      //   title: 'Financials',
+      //   path: '/financials'
+      // }
+    ];
+  }
+
+  // If userId does not match any specified users, return no navigation items
+  return [];
 }
 
-export default navigation
+export default navigation;

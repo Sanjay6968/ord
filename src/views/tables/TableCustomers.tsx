@@ -17,8 +17,10 @@ const rows = [
 export default function TableCustomers() {
     const [dialogOpen, setDialogOpen] = useState(false);
     const [selectedCustomer, setSelectedCustomer] = useState(null);
+    
     const handleRowClick = (params: GridRowParams) => {
         setSelectedCustomer(params.row);
+        
         setDialogOpen(true);
     };
 
