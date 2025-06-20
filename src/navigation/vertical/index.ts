@@ -40,26 +40,26 @@ const navigation = (): VerticalNavItemsType => {
         icon: FormatListBulleted,
         path: ordersPath
       },
-      // {
-      //   title: 'Inventory',
-      //   path: '/inventory',
-      //   icon: PackageVariant
-      // },
-      // {
-      //   title: 'Print Queue',
-      //   icon: Printer3dNozzle,
-      //   path: '/queue'
-      // },
-      // {
-      //   title: 'Customers',
-      //   icon: AccountMultiple,
-      //   path: '/customers'
-      // },
-      // {
-      //   icon: CurrencyRupee,
-      //   title: 'Financials',
-      //   path: '/financials'
-      // }
+       {
+         title: 'Inventory',
+          path: '/inventory',
+          icon: PackageVariant
+        },
+       { 
+          title: 'Print Queue',
+          icon: Printer3dNozzle,
+          path: '/queue'
+        },
+        {
+          title: 'Customers',
+          icon: AccountMultiple,
+          path: '/customers'
+        },
+       {
+         icon: CurrencyRupee,
+          title: 'Financials',
+          path: '/financials'
+        }
     ];
   }
 
