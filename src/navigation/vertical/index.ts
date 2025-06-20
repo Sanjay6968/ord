@@ -16,11 +16,11 @@ const navigation = (): VerticalNavItemsType => {
   }
 
   const userPaths: { [key: string]: string } = {
-    user_2ylTWtATsMW3yu1AbpDGSUtbGRz: '/admin/orders',
-    user_2ylTWtATsMW3yu1AbpDGSUtbGRz: '/sales/orders',
-    user_2ylTWtATsMW3yu1AbpDGSUtbGRz: '/production/orders',
-    user_2ylTWtATsMW3yu1AbpDGSUtbGRz: '/dispatch/orders',
-    user_2ylTWtATsMW3yu1AbpDGSUtbGRz: '/post-production/orders',
+    user_2jgefoBMl5FxEaM3XIvdf2QOd6t: '/admin/orders',
+    user_2h30mxeNsmKAObdfguTUZZoaj7B: '/sales/orders',
+    user_2jgen6hu0iAWBEGuDXlJPuSMniR: '/production/orders',
+    user_2jgeuZp4FUyEIn1OcRHN4qXamxe: '/dispatch/orders',
+    user_2jgnmC3TJOIoQA52LNJMjx2XgZB: '/post-production/orders',
   };
 
   if (userId && userPaths.hasOwnProperty(userId)) {
