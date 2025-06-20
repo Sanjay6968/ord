@@ -22,13 +22,16 @@ import DatePicker from 'react-datepicker'
 // ** Styled Components
 import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
 
-const CustomInput = forwardRef((props, ref) => {
+// ** Type Fix
+import { TextFieldProps } from '@mui/material/TextField'
+
+// ** Custom Input Component for DatePicker
+const CustomInput = forwardRef<HTMLInputElement, TextFieldProps>((props, ref) => {
   return <TextField inputRef={ref} label='Birth Date' fullWidth {...props} />
 })
 
 const TabInfo = () => {
-  // ** State
-  const [date, setDate] = useState<Date | null | undefined>(null)
+  const [date, setDate] = useState<Date | null>(null)
 
   return (
     <CardContent>
@@ -54,7 +57,9 @@ const TabInfo = () => {
                 id='account-settings-date'
                 placeholderText='MM-DD-YYYY'
                 customInput={<CustomInput />}
-                onChange={(date: Date) => setDate(date)}
+                onChange={(date: Date | null) => {
+                  if (date) setDate(date)
+                }}
               />
             </DatePickerWrapper>
           </Grid>
@@ -75,14 +80,10 @@ const TabInfo = () => {
           <Grid item xs={12} sm={6}>
             <FormControl fullWidth>
               <InputLabel>Country</InputLabel>
-
               <Select label='Country' defaultValue='USA'>
                 <MenuItem value='USA'>USA</MenuItem>
-
                 <MenuItem value='UK'>UK</MenuItem>
-
                 <MenuItem value='Australia'>Australia</MenuItem>
-
                 <MenuItem value='Germany'>Germany</MenuItem>
               </Select>
             </FormControl>
@@ -90,8 +91,7 @@ const TabInfo = () => {
 
           <Grid item xs={12} sm={6}>
             <FormControl fullWidth>
-              <InputLabel id='form-layouts-separator-multiple-select-label'>Languages</InputLabel>
-
+              <InputLabel id='account-settings-multiple-select-label'>Languages</InputLabel>
               <Select
                 multiple
                 defaultValue={['English']}
@@ -100,17 +100,11 @@ const TabInfo = () => {
                 input={<OutlinedInput label='Languages' id='select-multiple-language' />}
               >
                 <MenuItem value='English'>English</MenuItem>
-
                 <MenuItem value='French'>French</MenuItem>
-
                 <MenuItem value='Spanish'>Spanish</MenuItem>
-
                 <MenuItem value='Portuguese'>Portuguese</MenuItem>
-
                 <MenuItem value='Italian'>Italian</MenuItem>
-
                 <MenuItem value='German'>German</MenuItem>
-
                 <MenuItem value='Arabic'>Arabic</MenuItem>
               </Select>
             </FormControl>
@@ -119,12 +113,9 @@ const TabInfo = () => {
           <Grid item xs={12} sm={6}>
             <FormControl>
               <FormLabel sx={{ fontSize: '0.875rem' }}>Gender</FormLabel>
-
               <RadioGroup row defaultValue='male' aria-label='gender' name='account-settings-info-radio'>
                 <FormControlLabel value='male' label='Male' control={<Radio />} />
-
                 <FormControlLabel value='female' label='Female' control={<Radio />} />
-
                 <FormControlLabel value='other' label='Other' control={<Radio />} />
               </RadioGroup>
             </FormControl>
@@ -134,7 +125,6 @@ const TabInfo = () => {
             <Button variant='contained' sx={{ marginRight: 3.5 }}>
               Save Changes
             </Button>
-
             <Button type='reset' variant='outlined' color='secondary' onClick={() => setDate(null)}>
               Reset
             </Button>

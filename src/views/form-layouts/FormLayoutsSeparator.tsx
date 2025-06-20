@@ -33,14 +33,15 @@ interface State {
   showPassword2: boolean
 }
 
-const CustomInput = forwardRef((props, ref) => {
+// ** Custom Input for Date Picker
+const CustomInput = forwardRef<HTMLInputElement, any>((props, ref) => {
   return <TextField fullWidth {...props} inputRef={ref} label='Birth Date' autoComplete='off' />
 })
 
 const FormLayoutsSeparator = () => {
   // ** States
   const [language, setLanguage] = useState<string[]>([])
-  const [date, setDate] = useState<Date | null | undefined>(null)
+  const [date, setDate] = useState<Date | null>(null)
   const [values, setValues] = useState<State>({
     password: '',
     password2: '',
@@ -82,7 +83,6 @@ const FormLayoutsSeparator = () => {
   return (
     <Card>
       <CardHeader title='Multi Column with Form Separator' titleTypographyProps={{ variant: 'h6' }} />
-
       <Divider sx={{ margin: 0 }} />
 
       <form onSubmit={e => e.preventDefault()}>
@@ -105,7 +105,6 @@ const FormLayoutsSeparator = () => {
             <Grid item xs={12} sm={6}>
               <FormControl fullWidth>
                 <InputLabel htmlFor='form-layouts-separator-password'>Password</InputLabel>
-
                 <OutlinedInput
                   label='Password'
                   value={values.password}
@@ -131,7 +130,6 @@ const FormLayoutsSeparator = () => {
             <Grid item xs={12} sm={6}>
               <FormControl fullWidth>
                 <InputLabel htmlFor='form-layouts-separator-password-2'>Confirm Password</InputLabel>
-
                 <OutlinedInput
                   value={values.password2}
                   label='Confirm Password'
@@ -175,7 +173,6 @@ const FormLayoutsSeparator = () => {
             <Grid item xs={12} sm={6}>
               <FormControl fullWidth>
                 <InputLabel id='form-layouts-separator-select-label'>Country</InputLabel>
-
                 <Select
                   label='Country'
                   defaultValue=''
@@ -183,11 +180,8 @@ const FormLayoutsSeparator = () => {
                   labelId='form-layouts-separator-select-label'
                 >
                   <MenuItem value='UK'>UK</MenuItem>
-
                   <MenuItem value='USA'>USA</MenuItem>
-
                   <MenuItem value='Australia'>Australia</MenuItem>
-
                   <MenuItem value='Germany'>Germany</MenuItem>
                 </Select>
               </FormControl>
@@ -196,7 +190,6 @@ const FormLayoutsSeparator = () => {
             <Grid item xs={12} sm={6}>
               <FormControl fullWidth>
                 <InputLabel id='form-layouts-separator-multiple-select-label'>Language</InputLabel>
-
                 <Select
                   multiple
                   value={language}
@@ -206,17 +199,11 @@ const FormLayoutsSeparator = () => {
                   input={<OutlinedInput label='Language' id='select-multiple-language' />}
                 >
                   <MenuItem value='English'>English</MenuItem>
-
                   <MenuItem value='French'>French</MenuItem>
-
                   <MenuItem value='Spanish'>Spanish</MenuItem>
-
                   <MenuItem value='Portuguese'>Portuguese</MenuItem>
-
                   <MenuItem value='Italian'>Italian</MenuItem>
-
                   <MenuItem value='German'>German</MenuItem>
-
                   <MenuItem value='Arabic'>Arabic</MenuItem>
                 </Select>
               </FormControl>
@@ -230,7 +217,9 @@ const FormLayoutsSeparator = () => {
                 placeholderText='MM-DD-YYYY'
                 customInput={<CustomInput />}
                 id='form-layouts-separator-date'
-                onChange={(date: Date) => setDate(date)}
+                onChange={(date: Date | null) => {
+                  if (date) setDate(date)
+                }}
               />
             </Grid>
 
@@ -241,12 +230,10 @@ const FormLayoutsSeparator = () => {
         </CardContent>
 
         <Divider sx={{ margin: 0 }} />
-
         <CardActions>
           <Button size='large' type='submit' sx={{ mr: 2 }} variant='contained'>
             Submit
           </Button>
-
           <Button size='large' color='secondary' variant='outlined'>
             Cancel
           </Button>
