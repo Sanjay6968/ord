@@ -31,7 +31,7 @@ const Trophy = () => {
   const router = useRouter();
   
   const navigateToOrders = () => {
-    router.push('/orders');
+    window.location.href = '/orders';
   };
 
   const imageSrc = theme.palette.mode === 'light' ? 'triangle-light.png' : 'triangle-dark.png'
