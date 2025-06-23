@@ -27,7 +27,7 @@ const WeeklyOverview = () => {
   const router = useRouter();
   
   const navigateToOrders = () => {
-    router.push('/orders');
+    router.push('/sales/orders');
   };
 
   const options: ApexOptions = {
