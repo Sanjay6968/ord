@@ -28,7 +28,7 @@ const Trophy = () => {
   const router = useRouter()
 
   const navigateToOrders = () => {
-    router.push('/admin/orders') // ✅ Correct navigation
+    router.push('/sales/orders') // ✅ Correct navigation
   }
 
   const imageSrc = theme.palette.mode === 'light' ? 'triangle-light.png' : 'triangle-dark.png'
