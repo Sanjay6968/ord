@@ -1,11 +1,14 @@
-// ** MUI Imports
+// MUI Imports
 import Card from '@mui/material/Card'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
 import { styled, useTheme } from '@mui/material/styles'
 
-// Styled component for the triangle shaped background image
+// Next.js Import
+import { useRouter } from 'next/router'
+
+// Styled components
 const TriangleImg = styled('img')({
   right: 0,
   bottom: 0,
@@ -13,7 +16,6 @@ const TriangleImg = styled('img')({
   position: 'absolute'
 })
 
-// Styled component for the trophy image
 const TrophyImg = styled('img')({
   right: 36,
   bottom: 20,
@@ -21,18 +23,13 @@ const TrophyImg = styled('img')({
   position: 'absolute'
 })
 
-// Next imports
-import { useRouter } from 'next/router';
-
 const Trophy = () => {
-  // ** Hook
   const theme = useTheme()
+  const router = useRouter()
 
-  const router = useRouter();
-  
   const navigateToOrders = () => {
-    window.location.href = '/orders';
-  };
+    router.push('/admin/orders') // ✅ Correct navigation
+  }
 
   const imageSrc = theme.palette.mode === 'light' ? 'triangle-light.png' : 'triangle-dark.png'
 
@@ -46,7 +43,7 @@ const Trophy = () => {
         </Typography>
 
         <Typography variant='h5' sx={{ my: 4, color: 'primary.main' }}>
-        ₹40500
+          ₹40500
         </Typography>
 
         <Button size='small' variant='contained' onClick={navigateToOrders}>
@@ -54,7 +51,6 @@ const Trophy = () => {
         </Button>
 
         <TriangleImg alt='triangle background' src={`/images/misc/${imageSrc}`} />
-
         <TrophyImg alt='trophy' src='/images/misc/trophy.png' />
       </CardContent>
     </Card>
