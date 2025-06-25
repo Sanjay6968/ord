@@ -17,18 +17,47 @@ import { ApexOptions } from 'apexcharts'
 // ** Custom Components Imports
 import ReactApexcharts from 'src/@core/components/react-apexcharts'
 
-// Next imports
-import { useRouter } from 'next/router';
+// ** Next imports
+import { useRouter } from 'next/router'
+
+// ** React imports
+import { useState, useEffect } from 'react'
 
 const WeeklyOverview = () => {
-  // ** Hook
+  // ** Hooks
   const theme = useTheme()
+  const router = useRouter()
 
-  const router = useRouter();
-  
+  // ** State
+  const [chartData, setChartData] = useState<number[]>([0, 0, 0, 0, 0, 0, 0])
+  const [performance, setPerformance] = useState<number>(0)
+  const [loading, setLoading] = useState<boolean>(true)
+
   const navigateToOrders = () => {
-    router.push('/sales/orders');
-  };
+    router.push('/sales/orders')
+  }
+
+  // Simulated fetch
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true)
+
+      // Simulate API delay
+      await new Promise(res => setTimeout(res, 1000))
+
+      // Replace this with real API logic
+      const fakeResponse = {
+        weeklySales: [37, 57, 45, 75, 57, 40, 65],
+        performance: 45
+      }
+
+      setChartData(fakeResponse.weeklySales)
+      setPerformance(fakeResponse.performance)
+      setLoading(false)
+    }
+
+    fetchData()
+  }, [])
 
   const options: ApexOptions = {
     chart: {
@@ -39,9 +68,7 @@ const WeeklyOverview = () => {
       bar: {
         borderRadius: 9,
         distributed: true,
-        columnWidth: '40%',
-        endingShape: 'rounded',
-        startingShape: 'rounded'
+        columnWidth: '40%'
       }
     },
     stroke: {
@@ -100,21 +127,29 @@ const WeeklyOverview = () => {
           sx: { lineHeight: '2rem !important', letterSpacing: '0.15px !important' }
         }}
         action={
-          <IconButton size='small' aria-label='settings' className='card-more-options' sx={{ color: 'text.secondary' }}>
+          <IconButton
+            size='small'
+            aria-label='settings'
+            className='card-more-options'
+            sx={{ color: 'text.secondary' }}
+          >
             <DotsVertical />
           </IconButton>
         }
       />
 
       <CardContent sx={{ '& .apexcharts-xcrosshairs.apexcharts-active': { opacity: 0 } }}>
-        <ReactApexcharts type='bar' height={205} options={options} series={[{ data: [37, 57, 45, 75, 57, 40, 65] }]} />
+        <ReactApexcharts type='bar' height={205} options={options} series={[{ data: chartData }]} />
 
         <Box sx={{ mb: 7, display: 'flex', alignItems: 'center' }}>
           <Typography variant='h5' sx={{ mr: 4 }}>
-            45%
+            {loading ? '...' : `${performance}%`}
           </Typography>
 
-          <Typography variant='body2'>Your sales performance is 45% 😎 better compared to last month</Typography>
+          <Typography variant='body2'>
+            Your sales performance is{' '}
+            {loading ? 'loading...' : `${performance}% 😎 better compared to last month`}
+          </Typography>
         </Box>
 
         <Button fullWidth variant='contained' onClick={navigateToOrders}>
