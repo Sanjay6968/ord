@@ -1,5 +1,5 @@
 // ** React Imports
-import { ReactElement } from 'react'
+import { ReactElement, useEffect, useState } from 'react'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -15,7 +15,7 @@ import CardContent from '@mui/material/CardContent'
 import TrendingUp from 'mdi-material-ui/TrendingUp'
 import CurrencyInr from 'mdi-material-ui/CurrencyInr'
 import DotsVertical from 'mdi-material-ui/DotsVertical'
-import Flask from 'mdi-material-ui/Flask';
+import Flask from 'mdi-material-ui/Flask'
 import AccountOutline from 'mdi-material-ui/AccountOutline'
 
 // ** Types
@@ -28,62 +28,101 @@ interface DataType {
   icon: ReactElement
 }
 
-const salesData: DataType[] = [
-  {
-    stats: '150',
-    title: 'Orders',
-    color: 'primary',
-    icon: <TrendingUp sx={{ fontSize: '1.75rem' }} />
-  },
-  {
-    stats: '20',
-    title: 'Customers',
-    color: 'success',
-    icon: <AccountOutline sx={{ fontSize: '1.75rem' }} />
-  },
-  {
-    stats: '50',
-    color: 'warning',
-    title: 'Inventory',
-    icon: <Flask sx={{ fontSize: '1.75rem' }} />
-  },
-  {
-    stats: '40,500',
-    color: 'info',
-    title: 'Revenue',
-    icon: <CurrencyInr sx={{ fontSize: '1.75rem' }} />
-  }
-]
-
-const renderStats = () => {
-  return salesData.map((item: DataType, index: number) => (
-    <Grid item xs={12} sm={3} key={index}>
-      <Box key={index} sx={{ display: 'flex', alignItems: 'center' }}>
-        <Avatar
-          variant='rounded'
-          sx={{
-            mr: 3,
-            width: 44,
-            height: 44,
-            boxShadow: 3,
-            color: 'common.white',
-            backgroundColor: `${item.color}.main`
-          }}
-        >
-          {item.icon}
-        </Avatar>
-
-        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-          <Typography variant='caption'>{item.title}</Typography>
-
-          <Typography variant='h6'>{item.stats}</Typography>
-        </Box>
-      </Box>
-    </Grid>
-  ))
-}
-
 const StatisticsCard = () => {
+  const [statsData, setStatsData] = useState<DataType[]>([
+    {
+      stats: '...',
+      title: 'Orders',
+      color: 'primary',
+      icon: <TrendingUp sx={{ fontSize: '1.75rem' }} />
+    },
+    {
+      stats: '...',
+      title: 'Customers',
+      color: 'success',
+      icon: <AccountOutline sx={{ fontSize: '1.75rem' }} />
+    },
+    {
+      stats: '...',
+      title: 'Inventory',
+      color: 'warning',
+      icon: <Flask sx={{ fontSize: '1.75rem' }} />
+    },
+    {
+      stats: '...',
+      title: 'Revenue',
+      color: 'info',
+      icon: <CurrencyInr sx={{ fontSize: '1.75rem' }} />
+    }
+  ])
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const res = await fetch('https://back.mekuva.com/api/public/statistics-summary')
+        const data = await res.json()
+
+        setStatsData([
+          {
+            stats: `${data.orders}`,
+            title: 'Orders',
+            color: 'primary',
+            icon: <TrendingUp sx={{ fontSize: '1.75rem' }} />
+          },
+          {
+            stats: `${data.customers}`,
+            title: 'Customers',
+            color: 'success',
+            icon: <AccountOutline sx={{ fontSize: '1.75rem' }} />
+          },
+          {
+            stats: `${data.inventory}`,
+            title: 'Inventory',
+            color: 'warning',
+            icon: <Flask sx={{ fontSize: '1.75rem' }} />
+          },
+          {
+            stats: `${data.revenue.toLocaleString()}`,
+            title: 'Revenue',
+            color: 'info',
+            icon: <CurrencyInr sx={{ fontSize: '1.75rem' }} />
+          }
+        ])
+      } catch (error) {
+        console.error('Failed to fetch statistics-summary:', error)
+      }
+    }
+
+    fetchStats()
+  }, [])
+
+  const renderStats = () => {
+    return statsData.map((item: DataType, index: number) => (
+      <Grid item xs={12} sm={3} key={index}>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Avatar
+            variant='rounded'
+            sx={{
+              mr: 3,
+              width: 44,
+              height: 44,
+              boxShadow: 3,
+              color: 'common.white',
+              backgroundColor: `${item.color}.main`
+            }}
+          >
+            {item.icon}
+          </Avatar>
+
+          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+            <Typography variant='caption'>{item.title}</Typography>
+            <Typography variant='h6'>{item.stats}</Typography>
+          </Box>
+        </Box>
+      </Grid>
+    ))
+  }
+
   return (
     <Card>
       <CardHeader
