@@ -37,23 +37,20 @@ const WeeklyOverview = () => {
     router.push('/sales/orders')
   }
 
-  // Simulated fetch
+  // ** Fetch Data from Backend
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true)
-
-      // Simulate API delay
-      await new Promise(res => setTimeout(res, 1000))
-
-      // Replace this with real API logic
-      const fakeResponse = {
-        weeklySales: [37, 57, 45, 75, 57, 40, 65],
-        performance: 45
+      try {
+        const res = await fetch('https://back.mekuva.com/api/public/weekly-overview')
+        const data = await res.json()
+        setChartData(data.weeklySales || [0, 0, 0, 0, 0, 0, 0])
+        setPerformance(data.performance || 0)
+      } catch (err) {
+        console.error('Failed to fetch weekly overview:', err)
+      } finally {
+        setLoading(false)
       }
-
-      setChartData(fakeResponse.weeklySales)
-      setPerformance(fakeResponse.performance)
-      setLoading(false)
     }
 
     fetchData()
@@ -92,6 +89,7 @@ const WeeklyOverview = () => {
       theme.palette.background.default,
       theme.palette.primary.main,
       theme.palette.background.default,
+      theme.palette.background.default,
       theme.palette.background.default
     ],
     states: {
@@ -114,7 +112,8 @@ const WeeklyOverview = () => {
       tickAmount: 4,
       labels: {
         offsetX: -17,
-        formatter: value => `${value > 999 ? `${(value / 1000).toFixed(0)}` : value}k`
+        formatter: value =>
+          `${value > 999 ? `${(value / 1000).toFixed(0)}` : value}k`
       }
     }
   }
@@ -124,7 +123,10 @@ const WeeklyOverview = () => {
       <CardHeader
         title='Weekly Overview'
         titleTypographyProps={{
-          sx: { lineHeight: '2rem !important', letterSpacing: '0.15px !important' }
+          sx: {
+            lineHeight: '2rem !important',
+            letterSpacing: '0.15px !important'
+          }
         }}
         action={
           <IconButton
@@ -139,7 +141,12 @@ const WeeklyOverview = () => {
       />
 
       <CardContent sx={{ '& .apexcharts-xcrosshairs.apexcharts-active': { opacity: 0 } }}>
-        <ReactApexcharts type='bar' height={205} options={options} series={[{ data: chartData }]} />
+        <ReactApexcharts
+          type='bar'
+          height={205}
+          options={options}
+          series={[{ data: chartData }]}
+        />
 
         <Box sx={{ mb: 7, display: 'flex', alignItems: 'center' }}>
           <Typography variant='h5' sx={{ mr: 4 }}>
