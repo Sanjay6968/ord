@@ -1,14 +1,12 @@
-// MUI Imports
+import { useEffect, useState } from 'react'
 import Card from '@mui/material/Card'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
 import { styled, useTheme } from '@mui/material/styles'
-
-// Next.js Import
 import { useRouter } from 'next/router'
 
-// Styled components
+// Styled images
 const TriangleImg = styled('img')({
   right: 0,
   bottom: 0,
@@ -26,9 +24,27 @@ const TrophyImg = styled('img')({
 const Trophy = () => {
   const theme = useTheme()
   const router = useRouter()
+  const [revenue, setRevenue] = useState<number | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  const fetchRevenue = async () => {
+    try {
+      const res = await fetch('https://back.mekuva.com/api/public/monthly-revenue')
+      const data = await res.json()
+      setRevenue(data.revenue)
+    } catch (err) {
+      console.error('Failed to fetch revenue:', err)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchRevenue()
+  }, [])
 
   const navigateToOrders = () => {
-    router.push('/sales/orders') // ✅ Correct navigation
+    router.push('/sales/orders')
   }
 
   const imageSrc = theme.palette.mode === 'light' ? 'triangle-light.png' : 'triangle-dark.png'
@@ -37,13 +53,12 @@ const Trophy = () => {
     <Card sx={{ position: 'relative' }}>
       <CardContent>
         <Typography variant='h6'>Congratulations Rajkumar!</Typography>
-
         <Typography variant='body2' sx={{ letterSpacing: '0.25px' }}>
           Best month of the year
         </Typography>
 
         <Typography variant='h5' sx={{ my: 4, color: 'primary.main' }}>
-          ₹40500
+          ₹{loading ? '...' : revenue?.toLocaleString() ?? '0'}
         </Typography>
 
         <Button size='small' variant='contained' onClick={navigateToOrders}>
