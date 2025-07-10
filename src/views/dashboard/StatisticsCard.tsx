@@ -159,4 +159,4 @@ const StatisticsCard = () => {
   )
 }
 
-export default StatisticsCard  what it will do 
+export default StatisticsCard 
