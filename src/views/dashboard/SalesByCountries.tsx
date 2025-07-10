@@ -1,5 +1,7 @@
+'use client'
+
 // ** React Imports
-import { ReactNode } from 'react'
+import { useEffect, useState, ReactNode } from 'react'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -18,71 +20,37 @@ import DotsVertical from 'mdi-material-ui/DotsVertical'
 // ** Types
 import { ThemeColor } from 'src/@core/layouts/types'
 
-interface DataType {
-  title: string
-  sales: string
-  trend: ReactNode
-  trendDir: string
-  subtitle: string
-  avatarText: string
-  trendNumber: string
-  avatarColor: ThemeColor
+// ** Helper to get avatar initials (e.g., Telangana → TL)
+const getInitials = (state: string) =>
+  state
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase())
+    .join('')
+    .slice(0, 2)
+
+interface SalesData {
+  state: string
+  totalRevenue: number
+  orders: number
 }
 
-const data: DataType[] = [
-  {
-    sales: '894K',
-    trendDir: 'up',
-    subtitle: 'Telangana',
-    title: '₹8600',
-    avatarText: 'TS',
-    trendNumber: '25.8%',
-    avatarColor: 'success',
-    trend: <ChevronUp sx={{ color: 'success.main', fontWeight: 600 }} />
-  },
-  {
-    sales: '645K',
-    subtitle: 'Andhra Pradesh',
-    trendDir: 'down',
-    title: '₹7200',
-    avatarText: 'AP',
-    trendNumber: '6.2%',
-    avatarColor: 'error',
-    trend: <ChevronDown sx={{ color: 'error.main', fontWeight: 600 }} />
-  },
-  {
-    sales: '148K',
-    title: '₹9100',
-    trendDir: 'up',
-    avatarText: 'DL',
-    subtitle: 'Delhi',
-    trendNumber: '12.4%',
-    avatarColor: 'warning',
-    trend: <ChevronUp sx={{ color: 'success.main', fontWeight: 600 }} />
-  },
-  {
-    sales: '86K',
-    title: '₹5600',
-    trendDir: 'down',
-    avatarText: 'KA',
-    subtitle: 'Karnataka',
-    trendNumber: '11.9%',
-    avatarColor: 'secondary',
-    trend: <ChevronDown sx={{ color: 'error.main', fontWeight: 600 }} />
-  },
-  {
-    sales: '42K',
-    title: '₹9725',
-    trendDir: 'up',
-    avatarText: 'MH',
-    subtitle: 'Maharashtra',
-    trendNumber: '16.2%',
-    avatarColor: 'error',
-    trend: <ChevronUp sx={{ color: 'success.main', fontWeight: 600 }} />
-  }
-]
-
 const SalesByCountries = () => {
+  const [data, setData] = useState<SalesData[]>([])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch('https://back.mekuva.com/api/public/sales-by-state')
+        const result = await res.json()
+        setData(result)
+      } catch (error) {
+        console.error('Failed to fetch sales by state:', error)
+      }
+    }
+
+    fetchData()
+  }, [])
+
   return (
     <Card>
       <CardHeader
@@ -96,10 +64,19 @@ const SalesByCountries = () => {
       />
 
       <CardContent sx={{ pt: theme => `${theme.spacing(2)} !important` }}>
-        {data.map((item: DataType, index: number) => {
+        {data.map((item, index) => {
+          const trend = item.totalRevenue > 5000 ? 'up' : 'down'
+          const trendIcon =
+            trend === 'up' ? (
+              <ChevronUp sx={{ color: 'success.main', fontWeight: 600 }} />
+            ) : (
+              <ChevronDown sx={{ color: 'error.main', fontWeight: 600 }} />
+            )
+          const avatarColor: ThemeColor = trend === 'up' ? 'success' : 'error'
+
           return (
             <Box
-              key={item.title}
+              key={item.state}
               sx={{
                 display: 'flex',
                 alignItems: 'center',
@@ -113,10 +90,10 @@ const SalesByCountries = () => {
                   marginRight: 3,
                   fontSize: '1rem',
                   color: 'common.white',
-                  backgroundColor: `${item.avatarColor}.main`
+                  backgroundColor: `${avatarColor}.main`
                 }}
               >
-                {item.avatarText}
+                {getInitials(item.state)}
               </Avatar>
 
               <Box
@@ -130,36 +107,38 @@ const SalesByCountries = () => {
               >
                 <Box sx={{ marginRight: 2, display: 'flex', flexDirection: 'column' }}>
                   <Box sx={{ display: 'flex' }}>
-                    <Typography sx={{ mr: 0.5, fontWeight: 600, letterSpacing: '0.25px' }}>{item.title}</Typography>
+                    <Typography sx={{ mr: 0.5, fontWeight: 600, letterSpacing: '0.25px' }}>
+                      ₹{item.totalRevenue.toLocaleString()}
+                    </Typography>
 
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      {item.trend}
+                      {trendIcon}
 
                       <Typography
                         variant='caption'
                         sx={{
                           fontWeight: 600,
                           lineHeight: 1.5,
-                          color: item.trendDir === 'down' ? 'error.main' : 'success.main'
+                          color: trend === 'down' ? 'error.main' : 'success.main'
                         }}
                       >
-                        {item.trendNumber}
+                        {trend === 'up' ? '+12%' : '-8%'}
                       </Typography>
                     </Box>
                   </Box>
 
                   <Typography variant='caption' sx={{ lineHeight: 1.5 }}>
-                    {item.subtitle}
+                    {item.state}
                   </Typography>
                 </Box>
 
                 <Box sx={{ display: 'flex', textAlign: 'end', flexDirection: 'column' }}>
                   <Typography sx={{ fontWeight: 600, fontSize: '0.875rem', lineHeight: 1.72, letterSpacing: '0.22px' }}>
-                    {item.sales}
+                    {item.orders}
                   </Typography>
 
                   <Typography variant='caption' sx={{ lineHeight: 1.5 }}>
-                    Sales
+                    Orders
                   </Typography>
                 </Box>
               </Box>
